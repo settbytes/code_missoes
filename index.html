@@ -56,6 +56,7 @@
             font-weight: bold;
             transition: background-color 0.3s ease, transform 0.1s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
         }
 
         .project-card:hover {
@@ -72,6 +73,24 @@
         .icon {
             margin-right: 10px;
         }
+
+        /* Novos estilos para a mensagem de "em breve" */
+        .soon-message {
+            background-color: #ffc107; /* Amarelo */
+            color: #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 1.1em;
+            display: none; /* Escondido por padrão */
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .soon-message.show {
+            display: block;
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -81,10 +100,32 @@
         <p>Bem-vindo(a) ao repositório de exercícios de código. <br>Escolha o módulo que deseja explorar:</p>
 
         <a href="https://settbytes.github.io/code_missoes/missoes_visualg/index.html" class="project-card">
-            <span class="icon">💻</span> Visualg - Missões e Algoritmos
+            Visualg - Noções Básicas, Condições e Repetições
         </a>
 
+        <a id="otherProjectsLink" class="project-card" onclick="showMessage()">
+            Outros
+        </a>
+
+        <div id="soonMessage" class="soon-message">
+            Mais opções serão adicionadas em breve!
         </div>
+    </div>
+
+    <script>
+        function showMessage() {
+            const messageDiv = document.getElementById('soonMessage');
+            // Alterna a classe 'show' para mostrar/esconder a mensagem
+            messageDiv.classList.toggle('show');
+
+            // Opcional: Esconder a mensagem após alguns segundos se for um clique único
+            if (messageDiv.classList.contains('show')) {
+                setTimeout(() => {
+                    messageDiv.classList.remove('show');
+                }, 5000); // Esconde após 5 segundos
+            }
+        }
+    </script>
 
 </body>
 </html>
