@@ -29,8 +29,8 @@
         .container {
             width: 100%;
             max-width: 1000px;
-            /* >>> AJUSTE 1: Espaçamento de 40px no .container para respiro lateral */
-            padding: 0 40px; 
+            /* >>> CORREÇÃO PRINCIPAL: Removendo o padding lateral do .container (deixando 0) */
+            padding: 0; 
             box-sizing: border-box; 
             margin: 0 auto; 
         }
@@ -43,7 +43,7 @@
             width: 100%;
             height: 100%;
             background-color: var(--cor-fundo);
-            z-index: 1050;
+            z-index: 1050; /* Z-index maior que os modais */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -66,7 +66,7 @@
         .video-moldura video {
             display: block;
             width: 100%;
-            max-width: 800px; 
+            max-width: 800px; /* Ajuste o tamanho máximo do vídeo conforme desejado */
             height: auto;
             border-radius: 5px;
             border: 1px solid var(--cor-fundo);
@@ -77,7 +77,7 @@
             position: absolute; 
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%); 
             width: 80px;
             height: 80px;
             background-color: rgba(0, 0, 0, 0.6); 
@@ -98,7 +98,7 @@
             transform: translate(-50%, -50%);
             border-style: solid;
             border-width: 15px 0 15px 25px;
-            border-color: transparent transparent transparent var(--cor-texto-claro);
+            border-color: transparent transparent transparent var(--cor-texto-claro); 
         }
         #btn-iniciar-pratica {
             background-color: var(--cor-primaria); 
@@ -122,7 +122,7 @@
 
         header {
             background-color: var(--cor-cartao);
-            /* >>> AJUSTE 2: Padding interno do header (20px horizontal) */
+            /* >>> AJUSTE 2: Adiciona padding interno de 20px (respiro) */
             padding: 15px 20px; 
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -159,7 +159,7 @@
         }
 
         #btn-menu-principal {
-            background-color: var(--cor-secundaria);
+            background-color: var(--cor-secundaria); 
             color: var(--cor-texto-claro);
             border: none;
             padding: 12px 20px;
@@ -167,12 +167,12 @@
             cursor: pointer;
             font-weight: bold;
             font-size: 0.9em;
-            margin-right: 20px;
+            margin-right: 20px; 
             transition: background-color 0.3s, opacity 0.3s;
         }
 
         #btn-menu-principal:hover {
-            background-color: #2980b9;
+            background-color: #2980b9; 
         }
 
         .status-box {
@@ -245,8 +245,8 @@
 
         .missions-container {
             background-color: var(--cor-cartao);
-            /* >>> AJUSTE 3: Mantém padding vertical e remove o horizontal, alinhando com o .container */
-            padding: 20px 0; 
+            /* >>> AJUSTE 3: Adiciona padding de 20px em todos os lados (para o respiro interno do cartão) */
+            padding: 20px; 
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
@@ -394,7 +394,7 @@
     
     <audio id="audio-ultimate-4" src="audio4.mp3" preload="auto"></audio>
     
-    <audio id="checkin-audio" src="checkin.mp3" preload="auto"></audio>
+    <audio id="checkin-audio" preload="auto"></audio>
 
     <div id="motivational-modal" class="modal">
         <div class="modal-content" id="modal-content-area">
@@ -746,7 +746,7 @@
                 btnAvancado.textContent = 'Nível Avançado';
             } else {
                 btnAvancado.classList.add('locked');
-                btnAvancado.classList.remove('active'); // Garante que a aba não fique ativa se estiver bloqueada
+                btnAvancado.classList.remove('active'); 
                 btnAvancado.textContent = '🔒 Nível Avançado';
             }
         }
@@ -886,11 +886,9 @@
             loadState();
             
             const introVideo = document.getElementById('intro-video');
-            const playButton = document.getElementById('play-button-overlay'); // Adicionado
+            const playButton = document.getElementById('play-button-overlay'); 
             
-            // 🛑 IMPORTANTE: Removemos o introVideo.onended = iniciarPratica; aqui.
-            // Para garantir que ele nunca feche sozinho, remova também o 'controls' do HTML
-            // OU apenas comente/ignore a linha, se ela estivesse na sua versão anterior.
+            // 🛑 IMPORTANTE: Remoção da lógica de autoplay para evitar problemas de zoom no início.
 
             if (introVideo) {
                 // Tenta reproduzir. Se o navegador bloquear, ele cairá no .catch
