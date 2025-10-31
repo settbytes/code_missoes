@@ -31,15 +31,15 @@
 
         /* Título */
         h1 {
-            color: #0366d6; /* Cor padrão do link no GitHub */
+            color: #0366d6; 
             margin-bottom: 10px;
             font-size: 2.2em;
         }
 
-        /* Subtítulo/Descrição */
-        p {
+        /* Subtítulo/Descrição (AJUSTADO) */
+        p.main-description {
             color: #586069;
-            margin-bottom: 30px;
+            margin-bottom: 5px; /* Margem reduzida */
             font-size: 1.1em;
         }
 
@@ -60,8 +60,8 @@
         }
 
         .project-card:hover {
-            background-color: #0056b3; /* Um tom um pouco mais escuro ao passar o mouse */
-            transform: translateY(-2px); /* Efeito de leve elevação */
+            background-color: #0056b3; 
+            transform: translateY(-2px); 
         }
 
         .project-card:active {
@@ -69,27 +69,27 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
+        /* Estilos para a mensagem de aviso de Desktop (NOVO ESTILO) */
+        .warning-message-repositioned {
+            background-color: #e3f2fd; /* Azul bem clarinho */
+            color: #1565c0; /* Azul escuro para o texto */
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 0;
+            margin-bottom: 25px; /* Espaço antes dos botões */
+            font-size: 0.95em;
+            font-weight: 500;
+            display: block;
+        }
+
         /* Ícone simples (opcional) */
         .icon {
             margin-right: 10px;
         }
 
-        /* Novos estilos para a mensagem de "em breve" */
+        /* Mensagens antigas (desativadas) */
         .soon-message {
-            background-color: #ffc107; /* Amarelo */
-            color: #333;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            font-size: 1.1em;
-            display: none; /* Escondido por padrão */
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .soon-message.show {
-            display: block;
-            opacity: 1;
+            display: none; 
         }
     </style>
 </head>
@@ -97,8 +97,15 @@
 
     <div class="container">
         <h1>🚀 Code Missões</h1>
-        <p>Bem-vindo(a) ao repositório de exercícios de código. <br>Escolha o módulo que deseja explorar:</p>
-
+        <p class="main-description">
+            Bem-vindo(a) ao repositório de exercícios de código. <br>
+            Escolha o módulo que deseja explorar:
+        </p>
+        
+        <div id="desktopWarning" class="warning-message-repositioned">
+            Para uma melhor experiência, acesse esse pelo computador.
+        </div>
+        
         <a href="https://settbytes.github.io/code_missoes/missoes_visualg/index.html" class="project-card">
             Visualg - Noções Básicas, Condições e Repetições
         </a>
@@ -106,24 +113,12 @@
         <a id="otherProjectsLink" class="project-card" onclick="showMessage()">
             Outros
         </a>
-
-        <div id="soonMessage" class="soon-message">
-            Mais opções serão adicionadas em breve!
-        </div>
     </div>
 
     <script>
+        // Mantido para evitar erros de referência no onclick
         function showMessage() {
-            const messageDiv = document.getElementById('soonMessage');
-            // Alterna a classe 'show' para mostrar/esconder a mensagem
-            messageDiv.classList.toggle('show');
-
-            // Opcional: Esconder a mensagem após alguns segundos se for um clique único
-            if (messageDiv.classList.contains('show')) {
-                setTimeout(() => {
-                    messageDiv.classList.remove('show');
-                }, 5000); // Esconde após 5 segundos
-            }
+            console.log("Mensagem de 'Outros' clicada.");
         }
     </script>
 
