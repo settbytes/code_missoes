@@ -3,905 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Missões VisuAlg: Exercícios de Lógica</title>
+    <title>Code Missões - Índice de Projetos</title>
     <style>
-        :root {
-            --cor-fundo: #2c3e50;
-            --cor-primaria: #2ecc71;
-            --cor-secundaria: #3498db;
-            --cor-terciaria: #e74c3c;
-            --cor-texto-claro: #ecf0f1;
-            --cor-cartao: #34495e;
-            --cor-xp: #f1c40f;
-        }
-
+        /* Estilos básicos para o corpo da página */
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: var(--cor-fundo);
-            color: var(--cor-texto-claro);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            background-color: #f4f6f9;
+            color: #333;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
+            min-height: 100vh;
         }
 
+        /* Container principal */
         .container {
-            width: 100%;
-            max-width: 1000px;
-        }
-
-        /* --- Estilos para o Overlay do Vídeo --- */
-        #video-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--cor-fundo);
-            z-index: 1050; /* Z-index maior que os modais */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            box-sizing: border-box;
-            transition: opacity 0.5s ease;
-        }
-
-        .video-moldura {
-            background-color: var(--cor-cartao);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-            margin-bottom: 20px;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
             text-align: center;
-	    position: relative;
         }
 
-        .video-moldura video {
-            display: block;
-            width: 100%;
-            max-width: 800px; /* Ajuste o tamanho máximo do vídeo conforme desejado */
-            height: auto;
-            border-radius: 5px;
-            border: 1px solid var(--cor-fundo);
+        /* Título */
+        h1 {
+            color: #0366d6; 
+            margin-bottom: 10px;
+            font-size: 2.2em;
         }
 
-	/* --- Estilos para o Botão Play Centralizado --- */
-        #play-button-overlay {
-            position: absolute; /* Posicionamento em relação ao .video-moldura */
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%); /* Centraliza o elemento */
-            width: 80px;
-            height: 80px;
-            background-color: rgba(0, 0, 0, 0.6); /* Fundo escuro semitransparente */
-            border-radius: 50%; /* Faz o fundo ser um círculo */
-            cursor: pointer;
-            z-index: 1060; /* Acima do vídeo e do overlay */
-            pointer-events: none; /* Inicialmente não reage a cliques */
-            opacity: 0; /* Começa invisível */
-            transition: opacity 0.3s;
-        }
-
-        /* O Triângulo de Play é feito com bordas */
-        #play-button-overlay::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 55%; /* Ajuste para centralizar visualmente o triângulo */
-            transform: translate(-50%, -50%);
-            border-style: solid;
-            border-width: 15px 0 15px 25px;
-            border-color: transparent transparent transparent var(--cor-texto-claro); /* Triângulo branco/claro */
-        }
-
-        #btn-iniciar-pratica {
-            background-color: var(--cor-primaria); /* Verde vibrante */
-            color: var(--cor-fundo);
-            border: none;
-            padding: 15px 30px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1.2em;
-            letter-spacing: 1px;
-            transition: background-color 0.3s, transform 0.1s;
-        }
-
-        #btn-iniciar-pratica:hover {
-            background-color: #27ae60;
-            transform: translateY(-2px);
-        }
-        /* --- Fim dos Estilos de Overlay --- */
-
-
-        header {
-            background-color: var(--cor-cartao);
-            padding: 15px 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            margin-bottom: 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-
-        header h1 {
-            font-size: 1.8em;
-            margin: 0;
-            color: var(--cor-primaria);
-            display: flex;
-            align-items: center;
-        }
-        
-        #btn-reset {
-            background-color: var(--cor-terciaria);
-            color: var(--cor-texto-claro);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.9em;
-            margin-right: 20px;
-            transition: background-color 0.3s, opacity 0.3s;
-        }
-
-        #btn-reset:hover {
-            background-color: #c0392b;
-        }
-
-	#btn-menu-principal {
-            background-color: var(--cor-secundaria); /* Azul */
-            color: var(--cor-texto-claro);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.9em;
-            margin-right: 20px; /* Garante espaçamento entre ele e o status-box */
-            transition: background-color 0.3s, opacity 0.3s;
-        }
-
-        #btn-menu-principal:hover {
-            background-color: #2980b9; /* Um azul um pouco mais escuro no hover */
-        }
-
-        .status-box {
-            display: flex;
-            gap: 20px;
-        }
-
-        .status-item {
-            text-align: center;
-            padding: 8px 15px;
-            background-color: var(--cor-fundo);
-            border-radius: 8px;
-            min-width: 100px;
-            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
-        }
-
-        .status-item span {
-            display: block;
-            font-weight: bold;
-            font-size: 1.5em;
-        }
-
-        #xp-value { color: var(--cor-xp); }
-        #level-value { color: var(--cor-secundaria); }
-
-        .tabs {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--cor-cartao);
-            width: 100%;
-        }
-
-        .tab-button {
-            padding: 12px 25px;
-            border: none;
-            cursor: pointer;
-            background-color: var(--cor-fundo);
-            color: var(--cor-texto-claro);
-            font-weight: bold;
-            transition: background-color 0.3s, color 0.3s, border-bottom 0.3s;
-            flex-grow: 1;
-            text-align: center;
-            border-radius: 5px 5px 0 0;
-            opacity: 0.7;
-        }
-        
-        .tab-button.locked {
-            cursor: not-allowed;
-            color: var(--cor-terciaria);
-            opacity: 0.5;
-            background-color: #2c3e50;
-        }
-        
-        .tab-button.locked:hover {
-            background-color: #2c3e50;
-            color: var(--cor-terciaria);
-            opacity: 0.7;
-        }
-
-        .tab-button.active {
-            background-color: var(--cor-cartao);
-            color: var(--cor-primaria);
-            border-bottom: 3px solid var(--cor-primaria);
-            opacity: 1;
-        }
-        
-        #btn-basico.active { border-bottom-color: var(--cor-primaria); color: var(--cor-primaria);}
-        #btn-intermediario.active { border-bottom-color: var(--cor-secundaria); color: var(--cor-secundaria);}
-        #btn-avancado.active { border-bottom-color: var(--cor-terciaria); color: var(--cor-terciaria);}
-
-        .missions-container {
-            background-color: var(--cor-cartao);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .mission-level { display: none; }
-        .mission-level.active { display: block; }
-        
-        .mission-card {
-            background-color: #2c3e50;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-left: 5px solid var(--cor-primaria);
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .mission-card.intermediario { border-left-color: var(--cor-secundaria); }
-        .mission-card.avancado { border-left-color: var(--cor-terciaria); }
-
-        .mission-info {
-            flex-grow: 1;
-            padding-right: 45px; 
-        }
-
-        .mission-info h3 {
-            margin: 0 0 5px 0;
+        /* Subtítulo/Descrição (AJUSTADO) */
+        p.main-description {
+            color: #586069;
+            margin-bottom: 5px; /* Margem reduzida */
             font-size: 1.1em;
-            color: var(--cor-xp);
         }
 
-        .mission-info p {
-            margin: 0;
-            font-size: 0.9em;
-            line-height: 1.4;
-            text-align: justify;
-        }
-
-
-        .mission-action button {
-            min-width: 90px; 
-            background-color: var(--cor-primaria);
-            color: var(--cor-fundo);
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s, transform 0.1s;
-        }
-
-        .modal {
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.7);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-        
-        #confirm-modal, #lock-modal {
-            z-index: 1010;
-        }
-        
-        .modal-content {
-            background-color: var(--cor-fundo);
-            padding: 20px 30px;
-            border-radius: 10px;
-            border: 3px solid var(--cor-xp);
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            animation: fadeIn 0.5s;
-            width: fit-content; 
-            max-width: calc(100% - 40px);
-            box-sizing: border-box;
-        }
-        
-        .modal-content.ultimate h2 {
-            color: var(--cor-xp);
-            font-size: clamp(1.2em, 4vw, 1.8em);
-            white-space: nowrap; 
-            margin-top: 0; 
-            margin-bottom: 15px;
-        }
-        
-        .modal-content.confirm h2 {
-            color: var(--cor-terciaria);
-        }
-
-        .modal-buttons {
-            margin-top: 20px;
-            display: flex;
-            justify-content: space-around;
-            gap: 15px;
-        }
-
-        .close-button, .confirm-button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-        }
-        
-        .close-button {
-            background-color: #7f8c8d;
+        /* Menu de Opções (Cartão/Link) */
+        .project-card {
+            display: block;
+            text-decoration: none;
+            background-color: #0366d6;
             color: white;
-        }
-        
-        .confirm-button.reset {
-            background-color: var(--cor-terciaria);
-            color: white;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+            padding: 15px 25px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
         }
 
+        .project-card:hover {
+            background-color: #0056b3; 
+            transform: translateY(-2px); 
+        }
+
+        .project-card:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Estilos para a mensagem de aviso de Desktop (NOVO ESTILO) */
+        .warning-message-repositioned {
+            background-color: #e3f2fd; /* Azul bem clarinho */
+            color: #1565c0; /* Azul escuro para o texto */
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 0;
+            margin-bottom: 25px; /* Espaço antes dos botões */
+            font-size: 0.95em;
+            font-weight: 500;
+            display: block;
+        }
+
+        /* Ícone simples (opcional) */
+        .icon {
+            margin-right: 10px;
+        }
+
+        /* Mensagens antigas (desativadas) */
+        .soon-message {
+            display: none; 
+        }
     </style>
 </head>
 <body>
-    
-    <div id="video-overlay">
-        <div class="video-moldura">
-            <video id="intro-video" width="800" controls autoplay playsinline> 
-                <source src="avatar1.mp4" type="video/mp4">
-                Seu navegador não suporta a tag de vídeo.
-            </video>
-	<div id="play-button-overlay" onclick="startVideo()"></div>
-        </div>
-        <button id="btn-iniciar-pratica" onclick="iniciarPratica()">COMEÇAR A PRATICAR</button>
-    </div>
-    <audio id="motivational-audio" preload="auto"></audio>
-    
-    <audio id="audio-ultimate-4" src="audio4.mp3" preload="auto"></audio>
-    
-    <audio id="checkin-audio" src="checkin.mp3" preload="auto"></audio>
-
-    <div id="motivational-modal" class="modal">
-        <div class="modal-content" id="modal-content-area">
-            <h2 id="modal-title">Nível Concluído!</h2>
-            <p id="modal-message"></p>
-            <button class="close-button" onclick="closeModal()">Ótimo!</button>
-        </div>
-    </div>
-    
-    <div id="confirm-modal" class="modal">
-        <div class="modal-content confirm">
-            <h2>🚨 Atenção! Confirmação Necessária</h2>
-            <p>Tem certeza que deseja desmarcar todas as missões e zerar seu XP e Nível? Esta ação não pode ser desfeita.</p>
-            <div class="modal-buttons">
-                <button class="confirm-button reset" onclick="confirmReset()">Sim, Reiniciar Tudo</button>
-                <button class="close-button" onclick="closeConfirmModal()">Cancelar</button>
-            </div>
-        </div>
-    </div>
-    
-    <div id="lock-modal" class="modal">
-        <div class="modal-content confirm">
-            <h2>🔒 Nível Bloqueado!</h2>
-            <p id="lock-message"></p>
-            <button class="close-button" onclick="closeLockModal()">Entendi</button>
-        </div>
-    </div>
 
     <div class="container">
-        <header>
-            <h1 style="display: flex; align-items: center;">
-                <span style="color:var(--cor-xp);">🛠️</span> Missões VisuAlg
-            </h1>
-            
-            <div style="display: flex; align-items: center;">
-		<button id="btn-menu-principal" onclick="goToMainMenu()">Menu Principal</button>
-                <button id="btn-reset" onclick="triggerResetConfirmation()">Reiniciar Tudo</button>
-                <div class="status-box">
-                    <div class="status-item">
-                        <span>XP</span>
-                        <span id="xp-value">0</span>
-                    </div>
-                    <div class="status-item">
-                        <span>NÍVEL</span>
-                        <span id="level-value">1</span>
-                    </div>
-                </div>
-            </div>
-        </header>
+        <h1>🚀 Code Missões</h1>
+        <p class="main-description">
+            Bem-vindo(a) ao repositório de exercícios de código. <br>
+            Escolha o módulo que deseja explorar:
+        </p>
         
-        <div class="tabs">
-            <button class="tab-button active" id="btn-basico" onclick="showLevel('basico')">Nível Básico</button>
-            <button class="tab-button locked" id="btn-intermediario" onclick="showLevel('intermediario')">🔒 Nível Intermediário</button>
-            <button class="tab-button locked" id="btn-avancado" onclick="showLevel('avancado')">🔒 Nível Avançado</button>
+        <div id="desktopWarning" class="warning-message-repositioned">
+            Para uma melhor experiência, acesse pelo computador.
         </div>
+        
+        <a href="https://settbytes.github.io/code_missoes/missoes_visualg/index.html" class="project-card">
+            Visualg - Noções Básicas, Condições e Repetições
+        </a>
 
-        <div class="missions-container">
-
-            <div id="basico" class="mission-level active" data-level-name="Nível Básico">
-                <div class="mission-card basico" data-xp="100" data-id="B1" data-level="basico"><div class="mission-info"><h3>B1: Operações Básicas</h3><p>Crie um algoritmo que trabalhe com dois valores inteiros predefinidos (15 e 7). O programa deve calcular e exibir a soma e a multiplicação desses dois números.</p></div><div class="mission-action"><button onclick="toggleMission('B1', 100, 'basico')">Concluir</button></div></div>
-                <div class="mission-card basico" data-xp="100" data-id="B2" data-level="basico"><div class="mission-info"><h3>B2: Entrada e Saída de Valores</h3><p>Elabore um programa que receba o preço unitário de um item e a quantidade comprada pelo usuário. O algoritmo deve calcular e exibir o valor total da compra.</p></div><div class="mission-action"><button onclick="toggleMission('B2', 100, 'basico')">Concluir</button></div></div>
-                <div class="mission-card basico" data-xp="100" data-id="B3" data-level="basico"><div class="mission-info"><h3>B3: Múltiplos Tipos de Dados</h3><p>Desenvolva um algoritmo que receba o nome de uma pessoa, sua idade (em anos) e sua altura (em metros). O programa deve exibir essas três informações juntas em uma única frase.</p></div><div class="mission-action"><button onclick="toggleMission('B3', 100, 'basico')">Concluir</button></div></div>
-                <div class="mission-card basico" data-xp="100" data-id="B4" data-level="basico"><div class="mission-info"><h3>B4: Conversão de Temperatura</h3><p>Escreva um algoritmo que receba uma temperatura em graus Celsius. O programa deve converter e mostrar a temperatura equivalente em graus Fahrenheit.</p></div><div class="mission-action"><button onclick="toggleMission('B4', 100, 'basico')">Concluir</button></div></div>
-                <div class="mission-card basico" data-xp="100" data-id="B5" data-level="basico"><div class="mission-info"><h3>B5: Resto e Dígitos</h3><p>Crie um programa que receba um número inteiro de quatro dígitos. O programa deve isolar e exibir apenas o último dígito desse número.</p></div><div class="mission-action"><button onclick="toggleMission('B5', 100, 'basico')">Concluir</button></div></div>
-                <div class="mission-card basico" data-xp="100" data-id="B6" data-level="basico"><div class="mission-info"><h3>B6: Geometria Simples</h3><p>Crie um algoritmo que receba o comprimento do lado de um quadrado. O programa deve calcular e exibir o perímetro e a área desse quadrado.</p></div><div class="mission-action"><button onclick="toggleMission('B6', 100, 'basico')">Concluir</button></div></div>
-                <div class="mission-card basico" data-xp="100" data-id="B7" data-level="basico"><div class="mission-info"><h3>B7: Média Ponderada</h3><p>Faça um programa que receba três notas de um aluno (pesos 2, 3 e 5). O programa deve calcular e exibir a média ponderada dessas notas.</p></div><div class="mission-action"><button onclick="toggleMission('B7', 100, 'basico')">Concluir</button></div></div>
-            </div>
-
-            <div id="intermediario" class="mission-level" data-level-name="Nível Intermediário">
-                <div class="mission-card intermediario" data-xp="200" data-id="I1" data-level="intermediario"><div class="mission-info"><h3>I1: Condição Simples</h3><p>Crie um algoritmo que receba um número inteiro. Se o número for maior que 10, o programa deve exibir uma mensagem confirmando essa condição.</p></div><div class="mission-action"><button onclick="toggleMission('I1', 200, 'intermediario')">Concluir</button></div></div>
-                <div class="mission-card intermediario" data-xp="200" data-id="I2" data-level="intermediario"><div class="mission-info"><h3>I2: Estrutura Condicional Completa</h3><p>Desenvolva um programa que receba a idade de uma pessoa. O programa deve informar se a pessoa é maior de idade ou menor de idade.</p></div><div class="mission-action"><button onclick="toggleMission('I2', 200, 'intermediario')">Concluir</button></div></div>
-                <div class="mission-card intermediario" data-xp="200" data-id="I3" data-level="intermediario"><div class="mission-info"><h3>I3: Aumento Salarial (Condição com Cálculo)</h3><p>Faça um algoritmo que receba o salário de um funcionário. Se o salário for até R$ 1500,00, o reajuste é de 15%. Caso contrário, o reajuste é de 10%. Calcule e exiba o novo salário.</p></div><div class="mission-action"><button onclick="toggleMission('I3', 200, 'intermediario')">Concluir</button></div></div>
-                <div class="mission-card intermediario" data-xp="200" data-id="I4" data-level="intermediario"><div class="mission-info"><h3>I4: Identificando o Maior de Três</h3><p>Elabore um programa que receba três números inteiros. O programa deve identificar e exibir qual dos três números é o maior.</p></div><div class="mission-action"><button onclick="toggleMission('I4', 200, 'intermediario')">Concluir</button></div></div>
-                <div class="mission-card intermediario" data-xp="200" data-id="I5" data-level="intermediario"><div class="mission-info"><h3>I5: Condição e Desconto</h3><p>O programa deve receber o valor da compra e um código (1: à vista, 2: a prazo). Se o código for 1, aplica um desconto de 10%. Exiba o valor final.</p></div><div class="mission-action"><button onclick="toggleMission('I5', 200, 'intermediario')">Concluir</button></div></div>
-                <div class="mission-card intermediario" data-xp="200" data-id="I6" data-level="intermediario"><div class="mission-info"><h3>I6: Operadores Lógicos (E)</h3><p>Um aluno está aprovado se a média for 7 ou superior, e o número de faltas for 10 ou menos. Faça o programa exibir o status desse aluno com base na média e número de faltas.</p></div><div class="mission-action"><button onclick="toggleMission('I6', 200, 'intermediario')">Concluir</button></div></div>
-                <div class="mission-card intermediario" data-xp="200" data-id="I7" data-level="intermediario"><div class="mission-info"><h3>I7: Geometria e Condições Aninhadas</h3><p>O algoritmo deve receber o comprimento de três segmentos de reta e verificar se formam um triângulo. Se sim, o triângulo deve ser classificado (equilátero, isósceles ou escaleno).</p></div><div class="mission-action"><button onclick="toggleMission('I7', 200, 'intermediario')">Concluir</button></div></div>
-            </div>
-
-            <div id="avancado" class="mission-level" data-level-name="Nível Avançado">
-                <div class="mission-card avancado" data-xp="300" data-id="A1" data-level="avancado"><div class="mission-info"><h3>A1: Seleção Múltipla</h3><p>O programa deve receber um número inteiro entre 1 e 5. Em seguida, deve exibir o nome do número por extenso. Se estiver fora do intervalo, deve mostrar uma mensagem de erro.</p></div><div class="mission-action"><button onclick="toggleMission('A1', 300, 'avancado')">Concluir</button></div></div>
-                <div class="mission-card avancado" data-xp="300" data-id="A2" data-level="avancado"><div class="mission-info"><h3>A2: Repetição e Soma Condicional</h3><p>Faça um algoritmo que calcule e exiba a soma de todos os números pares no intervalo de 1 a 50.</p></div><div class="mission-action"><button onclick="toggleMission('A2', 300, 'avancado')">Concluir</button></div></div>
-                <div class="mission-card avancado" data-xp="300" data-id="A3" data-level="avancado"><div class="mission-info"><h3>A3: Repetição com Validação</h3><p>Escreva um programa que receba 10 números inteiros e some apenas os números que estão entre 10 e 50. O total da soma deve ser exibido ao final.</p></div><div class="mission-action"><button onclick="toggleMission('A3', 300, 'avancado')">Concluir</button></div></div>
-                <div class="mission-card avancado" data-xp="300" data-id="A4" data-level="avancado"><div class="mission-info"><h3>A4: Seleção Múltipla (Calculadora)</h3><p>Elabore um algoritmo que simule uma calculadora: ele recebe dois números e um código de operação (1 a 4), executa a operação correspondente e exibe o resultado.</p></div><div class="mission-action"><button onclick="toggleMission('A4', 300, 'avancado')">Concluir</button></div></div>
-                <div class="mission-card avancado" data-xp="300" data-id="A5" data-level="avancado"><div class="mission-info"><h3>A5: Repetição e Contagem</h3><p>Escreva um programa que receba a idade de 20 pessoas e faça os cálculos necessários para exibir a média das idades e o total de pessoas maiores de idade.</p></div><div class="mission-action"><button onclick="toggleMission('A5', 300, 'avancado')">Concluir</button></div></div>
-                <div class="mission-card avancado" data-xp="300" data-id="A6" data-level="avancado"><div class="mission-info"><h3>A6: Repetição (Fatorial)</h3><p>Faça um algoritmo que leia um número inteiro positivo, calcule e exiba o fatorial desse número.</p></div><div class="mission-action"><button onclick="toggleMission('A6', 300, 'avancado')">Concluir</button></div></div>
-                <div class="mission-card avancado" data-xp="300" data-id="A7" data-level="avancado"><div class="mission-info"><h3>A7: Repetição com Sentinela e Min/Máx</h3><p>O programa deve receber uma sequência de números positivos, interromper a leitura quando um número negativo for digitado e exibir o maior e o menor número positivo que foram lidos.</p></div><div class="mission-action"><button onclick="toggleMission('A7', 300, 'avancado')">Concluir</button></div></div>
-            </div>
-        </div>
+        <a id="otherProjectsLink" class="project-card" onclick="showMessage()">
+            Outros
+        </a>
     </div>
 
     <script>
-        let currentXP = 0;
-        const missions = {};
-        
-        const motivationalPhrases = [
-            "Você é um desbravador de algoritmos! Continue avançando!",
-            "Missão completa! O futuro da programação está em suas mãos.",
-            "Cada linha de código é um passo para a excelência. Parabéns!",
-            "Seu raciocínio lógico está afiado. Nada pode te parar agora.",
-            "A persistência é a chave do sucesso na programação. Você a dominou!",
-            "Conquistou o nível! Seu código para VisuAlg está ficando mais robusto e elegante.",
-            "Um verdadeiro mestre do VisuAlg. Rumo ao próximo desafio!",
-            "O aprendizado é contínuo, e você está no caminho certo. Avance!",
-            "Não existe erro, existe aprendizado. E você aprende rápido!",
-            "Seu desempenho está de outro nível. Que venham os próximos desafios!",
-            "Missão dada é missão cumprida. Seu talento é inegável!",
-            "O poder da lógica é seu. Use-o para resolver problemas complexos.",
-            "Parabéns! Sua dedicação está construindo uma base sólida.",
-            "Missão épica! Você acaba de desbloquear novas habilidades.",
-            "Completou a lista! Celebre a vitória e prepare-se para o próximo round."
-        ];
-
-        const motivationalAudio = document.getElementById('motivational-audio');
-        const ultimateAudio4 = document.getElementById('audio-ultimate-4'); 
-        const checkinAudio = document.getElementById('checkin-audio'); 
-        const modalContent = document.getElementById('modal-content-area');
-        const confirmModal = document.getElementById('confirm-modal');
-        const lockModal = document.getElementById('lock-modal');
-        const lockMessage = document.getElementById('lock-message');
-        const levelAudioMap = {
-            'basico': 'audio1.mp3',
-            'intermediario': 'audio2.mp3',
-            'avancado': 'audio3.mp3'
-        };
-
-	function startVideo() {
-            const introVideo = document.getElementById('intro-video');
-            const playButton = document.getElementById('play-button-overlay');
-
-            if (introVideo) {
-                // 1. Tenta dar play no vídeo
-                introVideo.play().catch(error => {
-                    console.error("Não foi possível iniciar o vídeo.");
-                });
-                
-                // 2. Esconde o ícone de play (agora que o vídeo está reproduzindo)
-                if (playButton) {
-                    playButton.style.opacity = '0';
-                    playButton.style.pointerEvents = 'none';
-                }
-            }
+        // Mantido para evitar erros de referência no onclick
+        function showMessage() {
+            console.log("Mensagem de 'Outros' clicada.");
         }
-        
-       // FUNÇÃO ORIGINAL: para fechar o OVERLAY
-        function iniciarPratica() {
-            const videoOverlay = document.getElementById('video-overlay');
-            const introVideo = document.getElementById('intro-video');
-            const playButton = document.getElementById('play-button-overlay');
-            
-            // Pausa o vídeo (caso esteja tocando, pois o usuário quer sair do overlay)
-            if (introVideo) {
-                introVideo.pause();
-            }
-
-            // Esconde o ícone de play (apenas por garantia)
-            if (playButton) {
-                playButton.style.opacity = '0';
-                playButton.style.pointerEvents = 'none';
-            }
-
-            // Inicia a transição de opacidade para ocultar o overlay suavemente
-            videoOverlay.style.opacity = '0';
-            
-            // Remove o overlay do fluxo após a transição
-            setTimeout(() => {
-                videoOverlay.style.display = 'none';
-            }, 500); // 500ms corresponde ao tempo da transição CSS
-        }
-
-        function playCheckinAudio() {
-            if (checkinAudio) {
-                checkinAudio.currentTime = 0; 
-                checkinAudio.play().catch(error => {
-                    console.warn("A reprodução de áudio 'checkin.mp3' foi bloqueada pelo navegador.");
-                });
-            }
-        }
-
-        function playLevelCompleteAudio(levelId) {
-            const audioSrc = levelAudioMap[levelId];
-            if (audioSrc) {
-                motivationalAudio.onended = null;
-                motivationalAudio.src = audioSrc;
-                motivationalAudio.play().catch(error => {
-                    console.warn("A reprodução de áudio de nível foi bloqueada pelo navegador.");
-                });
-            }
-        }
-        
-        function playUltimateCompletionAudio() {
-            // Toca audio3.mp3
-            motivationalAudio.onended = null;
-            motivationalAudio.src = 'audio3.mp3';
-            motivationalAudio.play().catch(error => {
-                console.warn("A reprodução de áudio 'audio3.mp3' foi bloqueada.");
-            });
-            
-            // Toca audio4.mp3 (simultaneamente)
-            if (ultimateAudio4) {
-                 ultimateAudio4.volume = 1.0; 
-                 ultimateAudio4.currentTime = 0;
-                 ultimateAudio4.onended = null; 
-                 ultimateAudio4.play().catch(error => {
-                     console.warn("A reprodução de áudio 'audio4.mp3' foi bloqueada.");
-                 });
-            }
-        }
-
-
-        function showMotivationalModal(title, message, isUltimate = false) {
-            document.getElementById('modal-title').innerHTML = title;
-            document.getElementById('modal-message').innerHTML = message;
-            
-            if (isUltimate) {
-                modalContent.classList.add('ultimate');
-            } else {
-                modalContent.classList.remove('ultimate');
-            }
-            
-            document.getElementById('motivational-modal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('motivational-modal').style.display = 'none';
-            motivationalAudio.pause();
-            motivationalAudio.currentTime = 0;
-            motivationalAudio.onended = null; 
-            
-            // PAUSA O SEGUNDO ÁUDIO (audio4.mp3)
-            if (ultimateAudio4) {
-                ultimateAudio4.pause();
-                ultimateAudio4.currentTime = 0;
-            }
-        }
-
-        function closeLockModal() {
-            lockModal.style.display = 'none';
-        }
-
-        function triggerResetConfirmation() {
-            confirmModal.style.display = 'flex';
-        }
-
-        function closeConfirmModal() {
-            confirmModal.style.display = 'none';
-        }
-
-	function goToMainMenu() {
-            window.location.href = "https://settbytes.github.io/code_missoes/";
-        }
-
-        function confirmReset() {
-            // Zera o progresso
-            resetAllMissions();
-            
-            // Fecha o modal de confirmação
-            closeConfirmModal();
-            
-            // Exibe o modal de feedback de reinício (que estava usando o alert)
-            // Reutilizando o modal motivacional para dar feedback
-            showMotivationalModal("Progresso Reiniciado!", "Todas as missões foram desmarcadas. Reinício de progresso concluído!", false);
-            
-            // Garante que o nível Básico seja exibido
-            showLevel('basico'); 
-        }
-
-        function showUltimateCompletionModal() {
-            const ultimateMessage = "Lembre-se: “A excelência nada mais é do que um amontoado de comportamentos que, isoladamente, nada têm de extraordinário.”";
-            const ultimateTitle = "🏆 PARABÉNS POR CONCLUIR TODAS AS MISSÕES! 🚀";
-            showMotivationalModal(ultimateTitle, ultimateMessage, true);
-        }
-        
-        // Variável de controle para ignorar eventos na inicialização
-        let isInitialLoad = true; 
-
-        // --- Funções de Lógica de Estado ---
-
-        function loadState() {
-            const savedMissions = localStorage.getItem('missions');
-            if (savedMissions) {
-                Object.assign(missions, JSON.parse(savedMissions));
-            }
-            // Chama updateAll para carregar o estado
-            updateAll();
-        }
-
-        function saveState() {
-            localStorage.setItem('missions', JSON.stringify(missions));
-        }
-        
-        function isLevelCompleted(levelId) {
-            const levelCards = document.querySelectorAll(`.mission-card[data-level="${levelId}"]`);
-            if (levelCards.length === 0) return false;
-            
-            let completedCount = 0;
-            levelCards.forEach(card => {
-                const id = card.getAttribute('data-id');
-                if (missions[id]) {
-                    completedCount++;
-                }
-            });
-            
-            return completedCount === levelCards.length;
-        }
-
-        let completedLevels = { 
-            'basico': false,
-            'intermediario': false,
-            'avancado': false
-        };
-        
-        function resetAllMissions() {
-            Object.keys(missions).forEach(key => delete missions[key]);
-            localStorage.setItem('ultimate_completed', 'false');
-            localStorage.removeItem('missions'); 
-            // Define isInitialLoad como false antes de chamar updateScore para permitir notificações
-            isInitialLoad = false; 
-            updateScore(); 
-            // REMOVIDO: alert("Todas as missões foram desmarcadas. Reinício de progresso concluído!");
-        }
-
-        function calculateCurrentLevel() {
-            if (isLevelCompleted('avancado') || isLevelCompleted('intermediario')) {
-                return 3;
-            } else if (isLevelCompleted('basico')) {
-                return 2;
-            } else {
-                return 1;
-            }
-        }
-
-        function updateLockState() {
-            const basicCompleted = isLevelCompleted('basico');
-            const intermediateCompleted = isLevelCompleted('intermediario');
-            
-            const btnIntermediario = document.getElementById('btn-intermediario');
-            const btnAvancado = document.getElementById('btn-avancado');
-
-            if (basicCompleted) {
-                btnIntermediario.classList.remove('locked');
-                btnIntermediario.textContent = 'Nível Intermediário';
-            } else {
-                btnIntermediario.classList.add('locked');
-                btnIntermediario.textContent = '🔒 Nível Intermediário';
-            }
-
-            if (basicCompleted && intermediateCompleted) {
-                btnAvancado.classList.remove('locked');
-                btnAvancado.textContent = 'Nível Avançado';
-            } else {
-                btnAvancado.classList.add('locked');
-                btnAvancado.textContent = '🔒 Nível Avançado';
-            }
-        }
-
-        function updateScore() {
-            currentXP = 0;
-            let totalCompletedMissions = 0;
-            const previousCompletedLevels = { ...completedLevels }; 
-            
-            completedLevels = { 'basico': false, 'intermediario': false, 'avancado': false };
-            const totalMissions = document.querySelectorAll('.mission-card').length;
-
-            document.querySelectorAll('.mission-card').forEach(card => {
-                const id = card.getAttribute('data-id');
-                const xp = parseInt(card.getAttribute('data-xp'));
-                const button = card.querySelector('button');
-
-                if (missions[id]) {
-                    currentXP += xp;
-                    totalCompletedMissions++;
-                    button.classList.add('completed');
-                    button.textContent = 'Refazer';
-                    card.style.opacity = '0.6';
-                } else {
-                    button.classList.remove('completed');
-                    button.textContent = 'Concluir';
-                    card.style.opacity = '1';
-                }
-            });
-
-            const currentLevel = calculateCurrentLevel();
-            document.getElementById('xp-value').textContent = currentXP;
-            document.getElementById('level-value').textContent = currentLevel;
-
-            updateLockState(); 
-            
-            const isUltimateCompletion = (totalCompletedMissions === totalMissions);
-            
-            if (isUltimateCompletion) {
-                const isUltimateCompletedPreviously = localStorage.getItem('ultimate_completed') === 'true';
-                if (!isUltimateCompletedPreviously && !isInitialLoad) { 
-                    showUltimateCompletionModal();
-                    localStorage.setItem('ultimate_completed', 'true');
-                }
-            } else {
-                 localStorage.setItem('ultimate_completed', 'false');
-            }
-            
-            // 2. CHECAGEM DE NÍVEL
-            ['basico', 'intermediario', 'avancado'].forEach(levelId => {
-                const isLevelCurrentlyCompleted = isLevelCompleted(levelId);
-                
-                if (isLevelCurrentlyCompleted) {
-                    completedLevels[levelId] = true;
-                    
-                    if (previousCompletedLevels[levelId] === false && !isInitialLoad) { 
-                        
-                        if (isUltimateCompletion && levelId === 'avancado') {
-                             playUltimateCompletionAudio(); 
-                             return; 
-                        }
-                        
-                        const levelName = document.getElementById(levelId).getAttribute('data-level-name');
-                        const randomIndex = Math.floor(Math.random() * motivationalPhrases.length);
-                        const message = motivationalPhrases[randomIndex];
-                        
-                        showMotivationalModal(`${levelName} Concluído!`, message);
-                        playLevelCompleteAudio(levelId);
-                    }
-                }
-            });
-            
-            // Reinicia o controle de load inicial após a primeira execução completa
-            if (isInitialLoad) {
-                 isInitialLoad = false;
-            }
-
-            saveState();
-        }
-
-        function toggleMission(id, xpValue, level) {
-            const wasCompleted = missions[id];
-            
-            if (level === 'intermediario' && !isLevelCompleted('basico')) {
-                lockMessage.textContent = "Para iniciar o Nível Intermediário, você deve primeiro concluir todas as missões do Nível Básico.";
-                lockModal.style.display = 'flex';
-                return;
-            } else if (level === 'avancado' && (!isLevelCompleted('basico') || !isLevelCompleted('intermediario'))) {
-                lockMessage.textContent = "Para iniciar o Nível Avançado, você deve primeiro concluir todas as missões do Nível Básico e do Nível Intermediário.";
-                lockModal.style.display = 'flex';
-                return;
-            }
-
-            if (wasCompleted) {
-                missions[id] = false;
-            } else {
-                missions[id] = true;
-            }
-            
-            playCheckinAudio(); 
-            
-            updateScore();
-        }
-
-        function showLevel(levelId) {
-            const btn = document.getElementById(`btn-${levelId}`);
-            
-            if (btn.classList.contains('locked')) {
-                if (levelId === 'intermediario') {
-                    lockMessage.textContent = "Para iniciar o Nível Intermediário, você deve primeiro concluir todas as missões do Nível Básico.";
-                } else if (levelId === 'avancado') {
-                    lockMessage.textContent = "Para iniciar o Nível Avançado, você deve primeiro concluir todas as missões do Nível Básico e do Nível Intermediário.";
-                }
-                lockModal.style.display = 'flex';
-                return;
-            }
-
-            document.querySelectorAll('.mission-level').forEach(div => {
-                div.classList.remove('active');
-            });
-            document.getElementById(levelId).classList.add('active');
-
-            document.querySelectorAll('.tab-button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            btn.classList.add('active');
-        }
-
-        function updateAll() {
-            updateLockState(); 
-            showLevel('basico');
-            updateScore();
-        }
-
-	// CORREÇÃO: Tenta iniciar o vídeo automaticamente e carrega o estado em seguida.
-        document.addEventListener('DOMContentLoaded', () => {
-            loadState();
-            
-            const introVideo = document.getElementById('intro-video');
-	        const playButton = document.getElementById('play-button-overlay'); // Adicionado
-            
-            // 🛑 IMPORTANTE: Removemos o introVideo.onended = iniciarPratica; aqui.
-            // Para garantir que ele nunca feche sozinho, remova também o 'controls' do HTML
-            // OU apenas comente/ignore a linha, se ela estivesse na sua versão anterior.
-
-            if (introVideo) {
-                // Tenta reproduzir. Se o navegador bloquear, ele cairá no .catch
-                introVideo.play().catch(error => {
-                    // SE o autoplay falhar, mostramos o ícone de play:
-                    if (playButton) {
-                        playButton.style.opacity = '1';
-                        playButton.style.pointerEvents = 'auto'; // Habilita o clique no ícone
-                        
-                        // Configura o clique no ícone para chamar a função startVideo
-                        playButton.onclick = startVideo;
-                    }
-                    console.warn("A reprodução automática do vídeo foi bloqueada pelo navegador.");
-                });
-            }
-        });
-
     </script>
 
 </body>
