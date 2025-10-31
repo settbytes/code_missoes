@@ -2,7 +2,6 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    
     <title>Missões VisuAlg: Exercícios de Lógica</title>
     <style>
         :root {
@@ -20,8 +19,8 @@
             background-color: var(--cor-fundo);
             color: var(--cor-texto-claro);
             margin: 0;
-            padding: 0px;
-			overflow-x: hidden;
+            padding: 0px; /* Mantido 0px */
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -30,6 +29,10 @@
         .container {
             width: 100%;
             max-width: 1000px;
+            /* >>> CORREÇÃO PARA ALINHAMENTO HORIZONTAL: Adiciona padding e garante centralização */
+            padding: 0 30px; 
+            box-sizing: border-box; 
+            margin: 0 auto; /* Garantia de centralização quando max-width é atingido */
         }
 
         /* --- Estilos para o Overlay do Vídeo --- */
@@ -57,7 +60,7 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
             margin-bottom: 20px;
             text-align: center;
-	    position: relative;
+            position: relative;
         }
 
         .video-moldura video {
@@ -69,7 +72,7 @@
             border: 1px solid var(--cor-fundo);
         }
 
-	/* --- Estilos para o Botão Play Centralizado --- */
+        /* --- Estilos para o Botão Play Centralizado --- */
         #play-button-overlay {
             position: absolute; /* Posicionamento em relação ao .video-moldura */
             top: 50%;
@@ -86,7 +89,7 @@
             transition: opacity 0.3s;
         }
 
-	/* O Triângulo de Play é feito com bordas */
+        /* O Triângulo de Play é feito com bordas */
         #play-button-overlay::before {
             content: '';
             position: absolute;
@@ -119,7 +122,8 @@
 
         header {
             background-color: var(--cor-cartao);
-            padding: 15px 30px;
+            /* >>> CORREÇÃO PARA ALINHAMENTO HORIZONTAL: Removeu o 30px lateral */
+            padding: 15px 0; 
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             margin-bottom: 25px;
@@ -154,7 +158,7 @@
             background-color: #c0392b;
         }
 
-	#btn-menu-principal {
+        #btn-menu-principal {
             background-color: var(--cor-secundaria); /* Azul */
             color: var(--cor-texto-claro);
             border: none;
@@ -241,7 +245,8 @@
 
         .missions-container {
             background-color: var(--cor-cartao);
-            padding: 20px;
+            /* >>> CORREÇÃO PARA ALINHAMENTO HORIZONTAL: Removeu o padding lateral */
+            padding: 20px 0; 
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
@@ -381,7 +386,7 @@
                 <source src="avatar1.mp4" type="video/mp4">
                 Seu navegador não suporta a tag de vídeo.
             </video>
-			<div id="play-button-overlay" onclick="startVideo()"></div>
+            <div id="play-button-overlay" onclick="startVideo()"></div>
         </div>
         <button id="btn-iniciar-pratica" onclick="iniciarPratica()">COMEÇAR A PRATICAR</button>
     </div>
@@ -425,7 +430,7 @@
             </h1>
             
             <div style="display: flex; align-items: center;">
-		<button id="btn-menu-principal" onclick="goToMainMenu()">Menu Principal</button>
+		        <button id="btn-menu-principal" onclick="goToMainMenu()">Menu Principal</button>
                 <button id="btn-reset" onclick="triggerResetConfirmation()">Reiniciar Tudo</button>
                 <div class="status-box">
                     <div class="status-item">
@@ -515,7 +520,7 @@
             'avancado': 'audio3.mp3'
         };
 
-	function startVideo() {
+        function startVideo() {
             const introVideo = document.getElementById('intro-video');
             const playButton = document.getElementById('play-button-overlay');
 
@@ -584,7 +589,7 @@
             motivationalAudio.onended = null;
             motivationalAudio.src = 'audio3.mp3';
             motivationalAudio.play().catch(error => {
-                console.warn("A reprodução de áudio 'audio3.mp3' foi bloqueada.");
+                console.warn("A reprodução de audio 'audio3.mp3' foi bloqueada.");
             });
             
             // Toca audio4.mp3 (simultaneamente)
@@ -593,7 +598,7 @@
                  ultimateAudio4.currentTime = 0;
                  ultimateAudio4.onended = null; 
                  ultimateAudio4.play().catch(error => {
-                     console.warn("A reprodução de áudio 'audio4.mp3' foi bloqueada.");
+                     console.warn("A reprodução de audio 'audio4.mp3' foi bloqueada.");
                  });
             }
         }
@@ -637,7 +642,7 @@
             confirmModal.style.display = 'none';
         }
 
-	function goToMainMenu() {
+        function goToMainMenu() {
             window.location.href = "https://settbytes.github.io/code_missoes/";
         }
 
@@ -741,6 +746,7 @@
                 btnAvancado.textContent = 'Nível Avançado';
             } else {
                 btnAvancado.classList.add('locked');
+                btnAvancado.classList.remove('active'); // Garante que a aba não fique ativa se estiver bloqueada
                 btnAvancado.textContent = '🔒 Nível Avançado';
             }
         }
@@ -799,8 +805,8 @@
                     if (previousCompletedLevels[levelId] === false && !isInitialLoad) { 
                         
                         if (isUltimateCompletion && levelId === 'avancado') {
-                             playUltimateCompletionAudio(); 
-                             return; 
+                            playUltimateCompletionAudio(); 
+                            return; 
                         }
                         
                         const levelName = document.getElementById(levelId).getAttribute('data-level-name');
@@ -875,12 +881,12 @@
             updateScore();
         }
 
-	// CORREÇÃO: Tenta iniciar o vídeo automaticamente e carrega o estado em seguida.
+        // CORREÇÃO: Tenta iniciar o vídeo automaticamente e carrega o estado em seguida.
         document.addEventListener('DOMContentLoaded', () => {
             loadState();
             
             const introVideo = document.getElementById('intro-video');
-	        const playButton = document.getElementById('play-button-overlay'); // Adicionado
+            const playButton = document.getElementById('play-button-overlay'); // Adicionado
             
             // 🛑 IMPORTANTE: Removemos o introVideo.onended = iniciarPratica; aqui.
             // Para garantir que ele nunca feche sozinho, remova também o 'controls' do HTML
@@ -906,23 +912,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
