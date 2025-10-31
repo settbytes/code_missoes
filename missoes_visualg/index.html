@@ -56,6 +56,7 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
             margin-bottom: 20px;
             text-align: center;
+	    position: relative;
         }
 
         .video-moldura video {
@@ -65,6 +66,35 @@
             height: auto;
             border-radius: 5px;
             border: 1px solid var(--cor-fundo);
+        }
+
+	/* --- Estilos para o Botão Play Centralizado --- */
+        #play-button-overlay {
+            position: absolute; /* Posicionamento em relação ao .video-moldura */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Centraliza o elemento */
+            width: 80px;
+            height: 80px;
+            background-color: rgba(0, 0, 0, 0.6); /* Fundo escuro semitransparente */
+            border-radius: 50%; /* Faz o fundo ser um círculo */
+            cursor: pointer;
+            z-index: 1060; /* Acima do vídeo e do overlay */
+            pointer-events: none; /* Inicialmente não reage a cliques */
+            opacity: 0; /* Começa invisível */
+            transition: opacity 0.3s;
+        }
+
+        /* O Triângulo de Play é feito com bordas */
+        #play-button-overlay::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 55%; /* Ajuste para centralizar visualmente o triângulo */
+            transform: translate(-50%, -50%);
+            border-style: solid;
+            border-width: 15px 0 15px 25px;
+            border-color: transparent transparent transparent var(--cor-texto-claro); /* Triângulo branco/claro */
         }
 
         #btn-iniciar-pratica {
@@ -122,6 +152,23 @@
 
         #btn-reset:hover {
             background-color: #c0392b;
+        }
+
+	#btn-menu-principal {
+            background-color: var(--cor-secundaria); /* Azul */
+            color: var(--cor-texto-claro);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-right: 20px; /* Garante espaçamento entre ele e o status-box */
+            transition: background-color 0.3s, opacity 0.3s;
+        }
+
+        #btn-menu-principal:hover {
+            background-color: #2980b9; /* Um azul um pouco mais escuro no hover */
         }
 
         .status-box {
@@ -334,6 +381,7 @@
                 <source src="avatar1.mp4" type="video/mp4">
                 Seu navegador não suporta a tag de vídeo.
             </video>
+	<div id="play-button-overlay" onclick="startVideo()"></div>
         </div>
         <button id="btn-iniciar-pratica" onclick="iniciarPratica()">COMEÇAR A PRATICAR</button>
     </div>
@@ -377,6 +425,7 @@
             </h1>
             
             <div style="display: flex; align-items: center;">
+		<button id="btn-menu-principal" onclick="goToMainMenu()">Menu Principal</button>
                 <button id="btn-reset" onclick="triggerResetConfirmation()">Reiniciar Tudo</button>
                 <div class="status-box">
                     <div class="status-item">
@@ -465,18 +514,40 @@
             'intermediario': 'audio2.mp3',
             'avancado': 'audio3.mp3'
         };
+
+	function startVideo() {
+            const introVideo = document.getElementById('intro-video');
+            const playButton = document.getElementById('play-button-overlay');
+
+            if (introVideo) {
+                // 1. Tenta dar play no vídeo
+                introVideo.play().catch(error => {
+                    console.error("Não foi possível iniciar o vídeo.");
+                });
+                
+                // 2. Esconde o ícone de play (agora que o vídeo está reproduzindo)
+                if (playButton) {
+                    playButton.style.opacity = '0';
+                    playButton.style.pointerEvents = 'none';
+                }
+            }
+        }
         
-        // NOVO: Função para iniciar a prática (esconder o vídeo)
+       // FUNÇÃO ORIGINAL: para fechar o OVERLAY
         function iniciarPratica() {
             const videoOverlay = document.getElementById('video-overlay');
             const introVideo = document.getElementById('intro-video');
+            const playButton = document.getElementById('play-button-overlay');
             
-            // Pausa o vídeo
+            // Pausa o vídeo (caso esteja tocando, pois o usuário quer sair do overlay)
             if (introVideo) {
-                // Remove o autoplay para não haver tentativa de iniciar de novo
-                introVideo.removeAttribute('autoplay');
-                // Garante que o vídeo seja pausado ao sair do overlay
                 introVideo.pause();
+            }
+
+            // Esconde o ícone de play (apenas por garantia)
+            if (playButton) {
+                playButton.style.opacity = '0';
+                playButton.style.pointerEvents = 'none';
             }
 
             // Inicia a transição de opacidade para ocultar o overlay suavemente
@@ -487,7 +558,6 @@
                 videoOverlay.style.display = 'none';
             }, 500); // 500ms corresponde ao tempo da transição CSS
         }
-
 
         function playCheckinAudio() {
             if (checkinAudio) {
@@ -565,6 +635,10 @@
 
         function closeConfirmModal() {
             confirmModal.style.display = 'none';
+        }
+
+	function goToMainMenu() {
+            window.location.href = "https://settbytes.github.io/code_missoes/";
         }
 
         function confirmReset() {
@@ -801,19 +875,33 @@
             updateScore();
         }
 
-        // CORREÇÃO: Tenta iniciar o vídeo automaticamente e carrega o estado em seguida.
+	// CORREÇÃO: Tenta iniciar o vídeo automaticamente e carrega o estado em seguida.
         document.addEventListener('DOMContentLoaded', () => {
             loadState();
             
             const introVideo = document.getElementById('intro-video');
+	        const playButton = document.getElementById('play-button-overlay'); // Adicionado
+            
+            // 🛑 IMPORTANTE: Removemos o introVideo.onended = iniciarPratica; aqui.
+            // Para garantir que ele nunca feche sozinho, remova também o 'controls' do HTML
+            // OU apenas comente/ignore a linha, se ela estivesse na sua versão anterior.
+
             if (introVideo) {
-                // Tenta reproduzir. Se o navegador bloquear o áudio, isso pode falhar.
+                // Tenta reproduzir. Se o navegador bloquear, ele cairá no .catch
                 introVideo.play().catch(error => {
-                    // console.log("A reprodução automática com som foi bloqueada pelo navegador.");
-                    // O vídeo permanece visível e pausado, aguardando o clique do usuário.
+                    // SE o autoplay falhar, mostramos o ícone de play:
+                    if (playButton) {
+                        playButton.style.opacity = '1';
+                        playButton.style.pointerEvents = 'auto'; // Habilita o clique no ícone
+                        
+                        // Configura o clique no ícone para chamar a função startVideo
+                        playButton.onclick = startVideo;
+                    }
+                    console.warn("A reprodução automática do vídeo foi bloqueada pelo navegador.");
                 });
             }
         });
+
     </script>
 
 </body>
