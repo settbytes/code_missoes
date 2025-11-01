@@ -128,24 +128,14 @@
 
         function startVideo() {
             const introVideo = document.getElementById('intro-video');
-            const playButton = document.getElementById('play-button-overlay');
-
             if (introVideo) {
                 // Tenta dar play no vídeo
-                introVideo.play().then(() => {
-                    // Se conseguir, esconde o botão de play
-                    if (playButton) {
-                        playButton.style.opacity = '0';
-                        playButton.style.pointerEvents = 'none';
-                    }
-                }).catch(error => {
-                    // Se não conseguir (ex: sem interação), apenas loga o erro
-                    console.warn("Não foi possível iniciar o vídeo automaticamente.");
+                introVideo.play().catch(error => {
+                    console.warn("Não foi possível iniciar o vídeo por interação.");
                 });
             }
         }
         
-        // FUNÇÃO MODIFICADA: Redireciona o usuário para o link de destino
         function iniciarPratica() {
             const introVideo = document.getElementById('intro-video');
             
@@ -162,25 +152,33 @@
             const introVideo = document.getElementById('intro-video');
             const playButton = document.getElementById('play-button-overlay');
 
-            if (introVideo) {
-                // Tenta reproduzir. Se o navegador bloquear, ele cairá no .catch
-                introVideo.play().catch(error => {
-                    // SE o autoplay falhar, garantimos que o ícone de play é visível e clicável:
-                    if (playButton) {
-                        playButton.style.opacity = '1';
-                        playButton.style.pointerEvents = 'auto'; 
-                        playButton.onclick = startVideo;
-                    }
-                    console.warn("A reprodução automática do vídeo foi bloqueada. Clique no play para assistir.");
+            if (introVideo && playButton) {
+
+                // 1. LÓGICA PRINCIPAL: ESCONDER O BOTÃO QUANDO O VÍDEO COMEÇA A TOCAR
+                introVideo.addEventListener('playing', () => {
+                    playButton.style.opacity = '0';
+                    playButton.style.pointerEvents = 'none'; // Desabilita clique
                 });
 
-                // Adiciona um listener para pausar e mostrar o play quando o vídeo terminar
-                introVideo.onended = () => {
-                     if (playButton) {
-                        playButton.style.opacity = '1';
-                        playButton.style.pointerEvents = 'auto';
-                    }
+                // 2. LÓGICA DE FIM/PAUSA: MOSTRAR O BOTÃO QUANDO O VÍDEO PARA
+                const showPlayButton = () => {
+                    playButton.style.opacity = '1';
+                    playButton.style.pointerEvents = 'auto'; // Habilita clique
                 };
+
+                introVideo.onended = showPlayButton;
+                introVideo.onpause = showPlayButton; // No caso de o usuário pausar
+                
+                // 3. LÓGICA DE INICIALIZAÇÃO: Tenta iniciar e configura o clique
+                
+                // Tenta reproduzir. Se o navegador bloquear (caindo no catch), o botão de play
+                // continua visível (opacity: 1; pointer-events: auto; definidos no CSS)
+                introVideo.play().catch(error => {
+                    console.warn("A reprodução automática do vídeo foi bloqueada. O botão Play está visível.");
+                });
+                
+                // O clique no botão play chama startVideo()
+                playButton.onclick = startVideo;
             }
         });
 
