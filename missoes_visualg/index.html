@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Boas-Vindas - Missões VisuAlg</title>
+    <link rel="icon" href="iconpage.ico" type="image/x-icon">
+    <style>
+        /* --- Variáveis CSS: CORES --- */
+        :root {
+            --cor-fundo: #2c3e50;
+            --cor-primaria: #2ecc71;
+            --cor-texto-claro: #ecf0f1;
+            --cor-cartao: #34495e;
+        }
+
+        /* --- Estilos Gerais: Centralização --- */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto-claro);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center; 
+            min-height: 100vh;
+        }
+
+        /* --- Estilos para o Overlay do Vídeo (MANTIDO) --- */
+        #video-overlay {
+            width: 100%;
+            height: 100%;
+            background-color: var(--cor-fundo);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+            /* Note: 'position: fixed' e 'z-index' não são necessários
+               aqui, já que é a única coisa na página. */
+        }
+
+        .video-moldura {
+            background-color: var(--cor-cartao);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .video-moldura video {
+            display: block;
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            border-radius: 5px;
+            border: 1px solid var(--cor-fundo);
+        }
+
+        /* --- Estilos para o Botão Play Centralizado --- */
+        #play-button-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1; /* Precisa estar acima do vídeo */
+            pointer-events: auto; /* Permite o clique no play */
+            opacity: 1; /* Mostra o botão play por padrão */
+            transition: opacity 0.3s;
+        }
+
+        /* O Triângulo de Play é feito com bordas */
+        #play-button-overlay::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 55%;
+            transform: translate(-50%, -50%);
+            border-style: solid;
+            border-width: 15px 0 15px 25px;
+            border-color: transparent transparent transparent var(--cor-texto-claro);
+        }
+
+        /* --- Estilos para o Botão "COMEÇAR A PRATICAR" --- */
+        #btn-iniciar-pratica {
+            background-color: var(--cor-primaria);
+            color: var(--cor-fundo);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.2em;
+            letter-spacing: 1px;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        #btn-iniciar-pratica:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="video-overlay">
+        <div class="video-moldura">
+            <video id="intro-video" width="800" playsinline>
+                <source src="avatar1.mp4" type="video/mp4">
+                Sua imagem/video de boas-vindas deve aparecer aqui.
+            </video>
+            <div id="play-button-overlay" onclick="startVideo()"></div>
+        </div>
+        
+        <button id="btn-iniciar-pratica" onclick="iniciarPratica()">COMEÇAR A PRATICAR</button>
+    </div>
+
+    <script>
+        const REDIRECT_URL = "missoes.html";
+
+        function startVideo() {
+            const introVideo = document.getElementById('intro-video');
+            const playButton = document.getElementById('play-button-overlay');
+
+            if (introVideo) {
+                // Tenta dar play no vídeo
+                introVideo.play().then(() => {
+                    // Se conseguir, esconde o botão de play
+                    if (playButton) {
+                        playButton.style.opacity = '0';
+                        playButton.style.pointerEvents = 'none';
+                    }
+                }).catch(error => {
+                    // Se não conseguir (ex: sem interação), apenas loga o erro
+                    console.warn("Não foi possível iniciar o vídeo automaticamente.");
+                });
+            }
+        }
+        
+        // FUNÇÃO MODIFICADA: Redireciona o usuário para o link de destino
+        function iniciarPratica() {
+            const introVideo = document.getElementById('intro-video');
+            
+            // Pausa o vídeo antes de redirecionar (boa prática)
+            if (introVideo) {
+                introVideo.pause();
+            }
+
+            // Redirecionamento para a página de missões
+            window.location.href = REDIRECT_URL;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const introVideo = document.getElementById('intro-video');
+            const playButton = document.getElementById('play-button-overlay');
+
+            if (introVideo) {
+                // Tenta reproduzir. Se o navegador bloquear, ele cairá no .catch
+                introVideo.play().catch(error => {
+                    // SE o autoplay falhar, garantimos que o ícone de play é visível e clicável:
+                    if (playButton) {
+                        playButton.style.opacity = '1';
+                        playButton.style.pointerEvents = 'auto'; 
+                        playButton.onclick = startVideo;
+                    }
+                    console.warn("A reprodução automática do vídeo foi bloqueada. Clique no play para assistir.");
+                });
+
+                // Adiciona um listener para pausar e mostrar o play quando o vídeo terminar
+                introVideo.onended = () => {
+                     if (playButton) {
+                        playButton.style.opacity = '1';
+                        playButton.style.pointerEvents = 'auto';
+                    }
+                };
+            }
+        });
+
+    </script>
+
+</body>
+</html>
