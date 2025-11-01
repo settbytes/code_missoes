@@ -6,22 +6,31 @@
     <title>Code Missões - Índice de Projetos</title>
     <link rel="icon" href="menu.ico" type="image/x-icon">
     <style>
-        /* Estilos básicos para o corpo da página */
+        /* VARIÁVEIS E ESTILOS GERAIS */
+        :root {
+            --cor-fundo: #f4f6f9;
+            --cor-cartao: #ffffff;
+            --cor-primaria: #0366d6;
+            --cor-texto-escuro: #333;
+            --cor-aviso-texto: #1565c0;
+            --cor-foguete: #e74c3c;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f6f9;
-            color: #333;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto-escuro);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            box-sizing: border-box;
         }
 
-        /* Container principal */
         .container {
-            background-color: #ffffff;
+            background-color: var(--cor-cartao);
             padding: 40px;
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
@@ -30,25 +39,30 @@
             text-align: center;
         }
 
-        /* Título */
         h1 {
-            color: #0366d6; 
+            color: var(--cor-primaria);
             margin-bottom: 10px;
             font-size: 2.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        h1 span {
+            color: var(--cor-foguete);
+            margin-right: 10px;
         }
 
-        /* Subtítulo/Descrição */
         p.main-description {
             color: #586069;
-            margin-bottom: 5px;
+            margin-bottom: 35px;
             font-size: 1.1em;
+            line-height: 1.4;
         }
 
-        /* Menu de Opções (Cartão/Link) */
         .project-card {
             display: block;
             text-decoration: none;
-            background-color: #0366d6;
+            background-color: var(--cor-primaria);
             color: white;
             padding: 15px 25px;
             margin: 15px 0;
@@ -65,134 +79,142 @@
             transform: translateY(-2px); 
         }
 
-        .project-card:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        /* ------------------------------------------- */
+        /* ESTILOS PARA O POP-UP MODAL (MANTIDOS) */
+        /* ------------------------------------------- */
+
+        #popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); 
+            z-index: 1000;
+            display: none; 
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
         }
 
-        /* ESTILOS DA MENSAGEM AZUL CLARO (PERMANENTE, SEM NEGRITO) */
-        .warning-message-repositioned {
-            background-color: #e3f2fd; 
-            color: #1565c0; 
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 0;
-            margin-bottom: 25px; 
-            font-size: 0.95em;
-            font-weight: normal; 
-            display: block;
+        .popup-content {
+            background-color: var(--cor-cartao);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            max-width: 350px;
+            width: 90%;
+            text-align: center;
+            transform: translateY(-20px); 
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* MODIFICAÇÃO: p dentro do pop-up usa o ID 'popupMessage' para ser dinâmico */
+        .popup-content #popupMessage {
+            color: var(--cor-aviso-texto);
+            font-size: 1.1em;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        /* Classes de Controle por JS */
+        #popup-overlay.show {
+            display: flex; 
             opacity: 1; 
         }
-
-        /* WRAPPER PARA MANTER O ESPAÇO NO LAYOUT */
-        .soon-message-wrapper {
-            min-height: 60px; /* Altura aproximada da caixa amarela + margens */
-            margin: 15px 0;
-            display: block; 
+        #popup-overlay.show .popup-content {
+            transform: translateY(0); 
         }
-        
-        /* ESTILOS DA MENSAGEM AMARELA (INICIALMENTE OCULTA, SEM NEGRITO) */
-        .soon-message {
-            background-color: #ffc107; 
-            color: #333; 
-            padding: 15px 25px;
-            border-radius: 8px;
-            font-size: 1.2em;
-            font-weight: normal; /* Sem negrito */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            
-            /* Ocultamento que MANTÉM O ESPAÇO: */
-            visibility: hidden; 
-            opacity: 0; 
-            transition: opacity 0.5s ease-out, visibility 0.5s ease-out; 
-        }
-        
-        /* Classe que torna a mensagem visível */
-        .soon-message.show {
-            visibility: visible;
-            opacity: 1;
-        }
-
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>🚀 Code Missões</h1>
+        <h1><span>🚀</span> Code Missões</h1>
         <p class="main-description">
             Bem-vindo(a) ao repositório de exercícios de programação. <br>
             Escolha o módulo que deseja explorar!
         </p>
         
-        <div id="desktopWarning" class="warning-message-repositioned">
-            <b>Para uma melhor experiência, acesse pelo computador.</b>
-        </div>
-        
-        <a href="https://settbytes.github.io/code_missoes/missoes_visualg/index.html" class="project-card">
+        <a data-link="https://settbytes.github.io/code_missoes/missoes_visualg/index.html" class="project-card" onclick="handleModuleClick(this)">
             VisuAlg - Noções Básicas, Condições e Repetições
         </a>
 
-        <a id="otherProjectsLink" class="project-card" onclick="showMessage()">
+        <a id="otherProjectsLink" class="project-card" onclick="showSoonMessage(this)">
             Outros Módulos
         </a>
-        
-        <div id="soonMessageWrapper" class="soon-message-wrapper">
-            <div id="soonMessage" class="soon-message">
-                Mais opções serão adicionadas em breve!
-            </div>
+    </div>
+
+    <div id="popup-overlay">
+        <div class="popup-content">
+            <p id="popupMessage">Conteúdo da Mensagem</p>
         </div>
     </div>
 
     <script>
-        let hideTimeout;
+        const popupOverlay = document.getElementById('popup-overlay');
+        const popupMessage = document.getElementById('popupMessage');
+        const duration = 4000; // 4 segundos
 
-        function showMessage() {
-            const soonMessageElement = document.getElementById('soonMessage');
-
-            // 1. Limpa o temporizador anterior para reiniciar a contagem (clique repetido)
-            clearTimeout(hideTimeout);
-
-            // 🔴 CORREÇÃO CRÍTICA: Remove estilos inline que podem estar impedindo o reaparecimento
-            soonMessageElement.style.visibility = ''; 
-            soonMessageElement.style.opacity = ''; 
-
-            // 2. Garante que a mensagem fique visível (adiciona a classe 'show')
-            soonMessageElement.classList.add('show');
+        /**
+         * FUNÇÃO 1: Exibe o pop-up com a mensagem de DESKTOP e REDIRECIONA após 4s.
+         * @param {HTMLElement} element O elemento 'a' que foi clicado.
+         */
+        function handleModuleClick(element) {
+            const targetUrl = element.getAttribute('data-link');
             
-            // 3. Agenda o desaparecimento após 4 segundos
-            hideTimeout = setTimeout(() => {
-                
-                // 4. Inicia o fade-out (remove a classe 'show')
-                soonMessageElement.classList.remove('show');
-                
-                // 5. Usa o transitionend para forçar a invisibilidade APÓS o fade-out
-                const transitionHandler = (e) => {
-                    if (e.propertyName === 'opacity') {
-                        // 6. Define a visibilidade como oculta (necessário para o próximo clique)
-                        soonMessageElement.style.visibility = 'hidden';
-                        
-                        // Remove este listener temporário
-                        soonMessageElement.removeEventListener('transitionend', transitionHandler);
-                    }
-                };
-                
-                // Adiciona o listener para este desaparecimento
-                soonMessageElement.addEventListener('transitionend', transitionHandler);
+            // Define o texto para o aviso de Desktop
+            popupMessage.textContent = "Para uma melhor experiência, acesse pelo computador.";
 
-            }, 4000); // 4 segundos
+            // 1. Exibe o pop-up (reutilizando a estrutura modal)
+            popupOverlay.style.display = 'flex';
+            setTimeout(() => { popupOverlay.classList.add('show'); }, 10);
+            
+            // 2. Desativa o clique no próprio botão durante o processo
+            element.style.pointerEvents = 'none';
+
+            // 3. Agenda o redirecionamento após 4 segundos
+            setTimeout(() => {
+                if (targetUrl) {
+                    window.location.href = targetUrl;
+                }
+                element.style.pointerEvents = 'auto'; // Reativa (caso de falha no redirecionamento)
+            }, duration); 
         }
-        
-        // Inicialização: Garante o estado inicial de invisibilidade
-        document.addEventListener('DOMContentLoaded', (event) => {
-             // O CSS já trata isso, mas mantemos o estilo inline para garantir o estado inicial
-             const soonMessageElement = document.getElementById('soonMessage');
-             soonMessageElement.style.visibility = 'hidden';
-             soonMessageElement.style.opacity = '0';
-        });
+
+        /**
+         * FUNÇÃO 2: Exibe o pop-up com a mensagem de "Em Breve", espera 4s e FECHA o pop-up.
+         * @param {HTMLElement} element O elemento 'a' que foi clicado.
+         */
+        function showSoonMessage(element) {
+            
+            // Define o texto para o aviso de Em Breve
+            popupMessage.textContent = "Em breve, mais módulos estarão disponíveis!";
+            
+            // 1. Exibe o pop-up
+            popupOverlay.style.display = 'flex';
+            setTimeout(() => { popupOverlay.classList.add('show'); }, 10);
+
+            // 2. Desativa o clique no próprio botão durante o processo
+            element.style.pointerEvents = 'none';
+
+            // 3. Agenda o desaparecimento após 4 segundos
+            setTimeout(() => {
+                
+                // Oculta o pop-up (fade-out)
+                popupOverlay.classList.remove('show'); 
+                
+                // Agenda o reset do display e reativa o botão APÓS a transição
+                setTimeout(() => {
+                    popupOverlay.style.display = 'none';
+                    element.style.pointerEvents = 'auto'; // Reativa o clique
+                }, 300); // 300ms = tempo da transição CSS
+                
+            }, duration);
+        }
+
     </script>
 
 </body>
 </html>
-
-
-
