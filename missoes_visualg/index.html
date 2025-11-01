@@ -394,9 +394,7 @@
         <button id="btn-iniciar-pratica" onclick="iniciarPratica()">COMEÇAR A PRATICAR</button>
     </div>
     <audio id="motivational-audio" preload="auto"></audio>
-    
-    <audio id="audio-ultimate-4" src="audio4.mp3" preload="auto"></audio>
-    
+        
     <audio id="checkin-audio" src="checkin.mp3" preload="auto"></audio>
 
     <div id="motivational-modal" class="modal">
@@ -511,7 +509,6 @@
         ];
 
         const motivationalAudio = document.getElementById('motivational-audio');
-        const ultimateAudio4 = document.getElementById('audio-ultimate-4'); 
         const checkinAudio = document.getElementById('checkin-audio'); 
         const modalContent = document.getElementById('modal-content-area');
         const confirmModal = document.getElementById('confirm-modal');
@@ -590,25 +587,16 @@
             }
         }
         
-        function playUltimateCompletionAudio() {
-            // Toca audio3.mp3
+	function playUltimateCompletionAudio() {
+            // Toca audio3.mp3 - Mantido para o efeito de conclusão definitiva
             motivationalAudio.onended = null;
             motivationalAudio.src = 'audio3.mp3';
             motivationalAudio.play().catch(error => {
-                console.warn("A reprodução de audio 'audio3.mp3' foi bloqueada.");
-            });
-            
-            // Toca audio4.mp3 (simultaneamente)
-            if (ultimateAudio4) {
-                 ultimateAudio4.volume = 1.0; 
-                 ultimateAudio4.currentTime = 0;
-                 ultimateAudio4.onended = null; 
-                 ultimateAudio4.play().catch(error => {
-                     console.warn("A reprodução de audio 'audio4.mp3' foi bloqueada.");
-                 });
-            }
+            console.warn("A reprodução de audio 'audio3.mp3' foi bloqueada.");
+        });
+    
+        // Nenhuma referência ao audio4.mp3
         }
-
 
         function showMotivationalModal(title, message, isUltimate = false) {
             document.getElementById('modal-title').innerHTML = title;
@@ -623,24 +611,20 @@
             document.getElementById('motivational-modal').style.display = 'flex';
         }
 
-        function closeModal() { // FUNÇÃO MODIFICADA
-            document.getElementById('motivational-modal').style.display = 'none';
-            motivationalAudio.pause();
-            motivationalAudio.currentTime = 0;
-            motivationalAudio.onended = null; 
-            
-            // PAUSA O SEGUNDO ÁUDIO (audio4.mp3)
-            if (ultimateAudio4) {
-                ultimateAudio4.pause();
-                ultimateAudio4.currentTime = 0;
-            }
-            
-            // NOVO: Verifica e avança para o próximo nível
-            if (nextLevelToShow) { 
-                showLevel(nextLevelToShow);
-                nextLevelToShow = null; // Reseta a variável após usar
-            } // FIM DO NOVO BLOCO
-        }
+	function closeModal() { // FUNÇÃO MODIFICADA
+    		document.getElementById('motivational-modal').style.display = 'none';
+    		motivationalAudio.pause();
+    		motivationalAudio.currentTime = 0;
+    		motivationalAudio.onended = null; 
+    
+   		// Removida a lógica de pausa do audio4.mp3
+    
+    		// NOVO: Verifica e avança para o próximo nível
+    		if (nextLevelToShow) { 
+        	showLevel(nextLevelToShow);
+        	nextLevelToShow = null; // Reseta a variável após usar
+    		} // FIM DO NOVO BLOCO
+	}
 
         function closeLockModal() {
             lockModal.style.display = 'none';
