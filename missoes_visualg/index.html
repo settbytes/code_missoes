@@ -520,6 +520,19 @@
             'avancado': 'audio3.mp3'
         };
 
+		// --- NOVO CÓDIGO: FUNÇÃO PARA BLOQUEAR ORIENTAÇÃO ---
+		function lockOrientationToPortrait() {
+		    // A API screen.orientation é padrão, mas o método lock pode variar ou falhar.
+		    if (screen.orientation && screen.orientation.lock) {
+		        // Tenta bloquear no modo retrato. Pode falhar se não estiver em tela cheia 
+		        // ou se o navegador bloquear o acesso.
+		        screen.orientation.lock('portrait').catch(err => {
+		            console.warn("Falha ao bloquear a orientação da tela (Bloqueio): ", err);
+		        });
+		    }
+		}
+		// ---------------------------------------------------
+
         function startVideo() {
             const introVideo = document.getElementById('intro-video');
             const playButton = document.getElementById('play-button-overlay');
@@ -561,6 +574,14 @@
             // Remove o overlay do fluxo após a transição
             setTimeout(() => {
                 videoOverlay.style.display = 'none';
+
+				// NOVO CÓDIGO AQUI: Tenta desbloquear a orientação da tela
+				if (screen.orientation && screen.orientation.unlock) {
+					screen.orientation.unlock().catch(err => {
+						console.warn("Falha ao desbloquear a orientação da tela: ", err);
+					});
+				}
+
             }, 500); // 500ms corresponde ao tempo da transição CSS
         }
 
@@ -895,6 +916,9 @@
         // CORREÇÃO: Tenta iniciar o vídeo automaticamente e carrega o estado em seguida.
         document.addEventListener('DOMContentLoaded', () => {
             loadState();
+
+			// NOVO CÓDIGO AQUI: Bloqueia a orientação assim que o DOM carrega e o overlay aparece
+   			lockOrientationToPortrait();
             
             const introVideo = document.getElementById('intro-video');
             const playButton = document.getElementById('play-button-overlay'); 
