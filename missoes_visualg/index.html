@@ -125,6 +125,7 @@
 
     <script>
         const REDIRECT_URL = "missoes.html";
+        const VISITED_KEY = 'intro_visited'; // Chave para o localStorage
 
         function startVideo() {
             const introVideo = document.getElementById('intro-video');
@@ -143,6 +144,8 @@
             if (introVideo) {
                 introVideo.pause();
             }
+            // Define a flag como 'true' ao sair da página para não tocar automaticamente na próxima vez
+            localStorage.setItem(VISITED_KEY, 'true'); 
 
             // Redirecionamento para a página de missões
             window.location.href = REDIRECT_URL;
@@ -151,6 +154,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const introVideo = document.getElementById('intro-video');
             const playButton = document.getElementById('play-button-overlay');
+            const alreadyVisited = localStorage.getItem(VISITED_KEY) === 'true';
 
             if (introVideo && playButton) {
 
@@ -167,17 +171,27 @@
                 };
 
                 introVideo.onended = showPlayButton;
-                introVideo.onpause = showPlayButton; // No caso de o usuário pausar
+                introVideo.onpause = showPlayButton; 
                 
-                // 3. LÓGICA DE INICIALIZAÇÃO: Tenta iniciar e configura o clique
+                // 3. LÓGICA DE INICIALIZAÇÃO CONTROLADA
                 
-                // Tenta reproduzir. Se o navegador bloquear (caindo no catch), o botão de play
-                // continua visível (opacity: 1; pointer-events: auto; definidos no CSS)
-                introVideo.play().catch(error => {
-                    console.warn("A reprodução automática do vídeo foi bloqueada. O botão Play está visível.");
-                });
+                if (!alreadyVisited) {
+                    // PRIMEIRA VISITA: Tenta iniciar o vídeo automaticamente
+                    introVideo.play().then(() => {
+                        // Se for bem-sucedido, define a flag.
+                        localStorage.setItem(VISITED_KEY, 'true');
+                    }).catch(error => {
+                        console.warn("Autoplay bloqueado na primeira visita. O botão Play está visível.");
+                        // Se o navegador bloquear o autoplay, o botão fica visível.
+                    });
+                } else {
+                    // SEGUNDA VISITA EM DIANTE: Não tenta autoplay.
+                    // Garante que o botão de play está visível.
+                    showPlayButton();
+                    console.log("Visita repetida. O vídeo requer clique.");
+                }
                 
-                // O clique no botão play chama startVideo()
+                // Configura o clique no botão play (sempre necessário)
                 playButton.onclick = startVideo;
             }
         });
