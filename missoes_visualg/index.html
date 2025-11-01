@@ -432,7 +432,7 @@
             </h1>
             
             <div style="display: flex; align-items: center;">
-		        <button id="btn-menu-principal" onclick="goToMainMenu()">Menu Principal</button>
+		        <button id="btn-menu-principal" onclick="goToMainMenu()">Menu Principal</button>
                 <button id="btn-reset" onclick="triggerResetConfirmation()">Reiniciar Tudo</button>
                 <div class="status-box">
                     <div class="status-item">
@@ -566,6 +566,9 @@
             }, 500); // 500ms corresponde ao tempo da transição CSS
         }
 
+        // Variável de controle para o avanço automático de nível
+        let nextLevelToShow = null; // LINHA ADICIONADA/MOVIDA PARA CIMA
+
         function playCheckinAudio() {
             if (checkinAudio) {
                 checkinAudio.currentTime = 0; 
@@ -619,7 +622,7 @@
             document.getElementById('motivational-modal').style.display = 'flex';
         }
 
-        function closeModal() {
+        function closeModal() { // FUNÇÃO MODIFICADA
             document.getElementById('motivational-modal').style.display = 'none';
             motivationalAudio.pause();
             motivationalAudio.currentTime = 0;
@@ -630,6 +633,12 @@
                 ultimateAudio4.pause();
                 ultimateAudio4.currentTime = 0;
             }
+            
+            // NOVO: Verifica e avança para o próximo nível
+            if (nextLevelToShow) { 
+                showLevel(nextLevelToShow);
+                nextLevelToShow = null; // Reseta a variável após usar
+            } // FIM DO NOVO BLOCO
         }
 
         function closeLockModal() {
@@ -753,7 +762,7 @@
             }
         }
 
-        function updateScore() {
+        function updateScore() { // FUNÇÃO MODIFICADA
             currentXP = 0;
             let totalCompletedMissions = 0;
             const previousCompletedLevels = { ...completedLevels }; 
@@ -806,6 +815,19 @@
                     
                     if (previousCompletedLevels[levelId] === false && !isInitialLoad) { 
                         
+                        // INÍCIO DO NOVO BLOCO: Lógica de avanço automático
+                        let nextLevelId = null;
+                        if (levelId === 'basico') {
+                            nextLevelId = 'intermediario';
+                        } else if (levelId === 'intermediario') {
+                            nextLevelId = 'avancado';
+                        }
+                        
+                        if (nextLevelId) {
+                            nextLevelToShow = nextLevelId; // Define o próximo nível para o fechamento do modal
+                        }
+                        // FIM DO NOVO BLOCO
+                        
                         if (isUltimateCompletion && levelId === 'avancado') {
                             playUltimateCompletionAudio(); 
                             return; 
@@ -848,9 +870,9 @@
                 missions[id] = true;
             }
             
-            // >>> CORREÇÃO PARA ÁUDIO: Adicionar um pequeno atraso, pois o navegador estava bloqueando
-            // playCheckinAudio(); 
-            setTimeout(playCheckinAudio, 20); 
+            if ( (missions[id] === false) || (missions[id] === true && !isLevelCompleted(level)) ) {
+   	        setTimeout(playCheckinAudio, 20); 
+	    }
             
             updateScore();
         }
@@ -914,5 +936,3 @@
 
 </body>
 </html>
-
-
