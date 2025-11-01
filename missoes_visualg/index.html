@@ -555,6 +555,12 @@
                 playButton.style.pointerEvents = 'none';
             }
 
+			// 👇 NOVO: Tenta liberar a rotação da tela
+    		if (screen.orientation && screen.orientation.unlock) {
+        		screen.orientation.unlock();
+        		console.log("Orientação de tela desbloqueada para o modo paisagem.");
+    		}
+
             // Inicia a transição de opacidade para ocultar o overlay suavemente
             videoOverlay.style.opacity = '0';
             
@@ -915,12 +921,20 @@
                     console.warn("A reprodução automática do vídeo foi bloqueada pelo navegador.");
                 });
             }
+
+			// 👇 NOVO: Bloqueia a tela em modo retrato
+            if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock('portrait').catch(err => {
+                    console.warn("Não foi possível bloquear a orientação (pode não ser suportado ou a permissão não foi dada).", err);
+                });
+            }
         });
 
     </script>
 
 </body>
 </html>
+
 
 
 
