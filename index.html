@@ -80,9 +80,10 @@
         }
 
         /* ------------------------------------------- */
-        /* ESTILOS PARA O POP-UP MODAL (MANTIDOS) */
+        /* ESTILOS PARA O POP-UP MODAL */
         /* ------------------------------------------- */
 
+        /* Overlay (Fundo Escuro) */
         #popup-overlay {
             position: fixed;
             top: 0;
@@ -98,6 +99,7 @@
             transition: opacity 0.3s ease-in-out;
         }
 
+        /* Pop-up (Caixa da Mensagem) */
         .popup-content {
             background-color: var(--cor-cartao);
             padding: 30px;
@@ -110,7 +112,6 @@
             transition: transform 0.3s ease-in-out;
         }
 
-        /* MODIFICAÇÃO: p dentro do pop-up usa o ID 'popupMessage' para ser dinâmico */
         .popup-content #popupMessage {
             color: var(--cor-aviso-texto);
             font-size: 1.1em;
@@ -158,6 +159,27 @@
         const duration = 4000; // 4 segundos
 
         /**
+         * FUNÇÃO DE CORREÇÃO:
+         * Garante que o pop-up esteja oculto quando a página é restaurada
+         * (solução para o botão "Voltar" do navegador).
+         */
+        function hideModalOnPageRestore() {
+            // Remove a classe 'show' e força o 'display: none'
+            if (popupOverlay.classList.contains('show')) {
+                popupOverlay.classList.remove('show');
+            }
+            // Usa setTimeout para garantir que a propriedade display seja definida
+            // após qualquer possível transição de cache do navegador.
+            setTimeout(() => {
+                popupOverlay.style.display = 'none';
+            }, 50); 
+        }
+        
+        // Listener para o evento pageshow (Chave para a correção)
+        window.addEventListener('pageshow', hideModalOnPageRestore);
+
+
+        /**
          * FUNÇÃO 1: Exibe o pop-up com a mensagem de DESKTOP e REDIRECIONA após 4s.
          * @param {HTMLElement} element O elemento 'a' que foi clicado.
          */
@@ -176,10 +198,15 @@
 
             // 3. Agenda o redirecionamento após 4 segundos
             setTimeout(() => {
+                
+                // Redireciona a página (o pop-up desaparece com a mudança de página)
                 if (targetUrl) {
                     window.location.href = targetUrl;
                 }
-                element.style.pointerEvents = 'auto'; // Reativa (caso de falha no redirecionamento)
+                
+                // Reativa o botão (caso de falha no redirecionamento)
+                element.style.pointerEvents = 'auto';
+                
             }, duration); 
         }
 
@@ -213,7 +240,6 @@
                 
             }, duration);
         }
-
     </script>
 
 </body>
