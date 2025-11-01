@@ -431,7 +431,7 @@
             </h1>
             
             <div style="display: flex; align-items: center;">
-                <button id="btn-menu-principal" onclick="goToMainMenu()">Menu Principal</button>
+		        <button id="btn-menu-principal" onclick="goToMainMenu()">Menu Principal</button>
                 <button id="btn-reset" onclick="triggerResetConfirmation()">Reiniciar Tudo</button>
                 <div class="status-box">
                     <div class="status-item">
@@ -490,34 +490,6 @@
         let currentXP = 0;
         const missions = {};
         
-        // NOVO: Variável de controle do estado do overlay
-        let isOverlayActive = true; 
-        
-        // Variáveis para a tag viewport
-        let viewportMeta = null;
-        const defaultViewport = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
-        const restrictedViewport = 'width=5000px, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
-
-
-        // NOVO: Função para criar/alterar o viewport em modo paisagem
-        function handleOrientationChange() {
-            if (!isOverlayActive) return;
-
-            const isLandscape = window.innerWidth > window.innerHeight;
-
-            if (isLandscape) {
-                // Se estiver em paisagem, aplica o viewport restrito
-                if (viewportMeta) {
-                    viewportMeta.content = restrictedViewport;
-                }
-            } else {
-                // Se estiver em retrato, aplica o viewport padrão
-                if (viewportMeta) {
-                    viewportMeta.content = defaultViewport;
-                }
-            }
-        }
-        
         const motivationalPhrases = [
             "Você é um desbravador de algoritmos! Continue avançando!",
             "Missão completa! O futuro da programação está em suas mãos.",
@@ -566,7 +538,7 @@
             }
         }
         
-        // FUNÇÃO MODIFICADA: Remove o overlay, desativa o listener E REMOVE A TAG VIEPORT
+       // FUNÇÃO ORIGINAL: para fechar o OVERLAY
         function iniciarPratica() {
             const videoOverlay = document.getElementById('video-overlay');
             const introVideo = document.getElementById('intro-video');
@@ -586,17 +558,6 @@
             // Inicia a transição de opacidade para ocultar o overlay suavemente
             videoOverlay.style.opacity = '0';
             
-            // NOVO: Desativa o controle e remove o listener
-            isOverlayActive = false;
-            window.removeEventListener('resize', handleOrientationChange);
-            window.removeEventListener('orientationchange', handleOrientationChange);
-
-            // NOVO E CRUCIAL: Remove a tag viewport do DOM
-            if (viewportMeta) {
-                viewportMeta.remove();
-                viewportMeta = null; // Zera a referência
-            }
-
             // Remove o overlay do fluxo após a transição
             setTimeout(() => {
                 videoOverlay.style.display = 'none';
@@ -604,7 +565,7 @@
         }
 
         // Variável de controle para o avanço automático de nível
-        let nextLevelToShow = null; 
+        let nextLevelToShow = null; // LINHA ADICIONADA/MOVIDA PARA CIMA
 
         function playCheckinAudio() {
             if (checkinAudio) {
@@ -626,14 +587,14 @@
             }
         }
         
-        function playUltimateCompletionAudio() {
+	function playUltimateCompletionAudio() {
             // Toca audio3.mp3 - Mantido para o efeito de conclusão definitiva
             motivationalAudio.onended = null;
             motivationalAudio.src = 'audio3.mp3';
             motivationalAudio.play().catch(error => {
             console.warn("A reprodução de audio 'audio3.mp3' foi bloqueada.");
         });
-        
+    
         // Nenhuma referência ao audio4.mp3
         }
 
@@ -650,20 +611,20 @@
             document.getElementById('motivational-modal').style.display = 'flex';
         }
 
-        function closeModal() { // FUNÇÃO MODIFICADA
-            document.getElementById('motivational-modal').style.display = 'none';
-            motivationalAudio.pause();
-            motivationalAudio.currentTime = 0;
-            motivationalAudio.onended = null; 
-        
-            // Removida a lógica de pausa do audio4.mp3
-        
-            // NOVO: Verifica e avança para o próximo nível
-            if (nextLevelToShow) { 
-                showLevel(nextLevelToShow);
-                nextLevelToShow = null; // Reseta a variável após usar
-            } // FIM DO NOVO BLOCO
-        }
+	function closeModal() { // FUNÇÃO MODIFICADA
+    		document.getElementById('motivational-modal').style.display = 'none';
+    		motivationalAudio.pause();
+    		motivationalAudio.currentTime = 0;
+    		motivationalAudio.onended = null; 
+    
+   		// Removida a lógica de pausa do audio4.mp3
+    
+    		// NOVO: Verifica e avança para o próximo nível
+    		if (nextLevelToShow) { 
+        	showLevel(nextLevelToShow);
+        	nextLevelToShow = null; // Reseta a variável após usar
+    		} // FIM DO NOVO BLOCO
+	}
 
         function closeLockModal() {
             lockModal.style.display = 'none';
@@ -895,8 +856,8 @@
             }
             
             if ( (missions[id] === false) || (missions[id] === true && !isLevelCompleted(level)) ) {
-                setTimeout(playCheckinAudio, 20); 
-            }
+   	        setTimeout(playCheckinAudio, 20); 
+	    }
             
             updateScore();
         }
@@ -937,17 +898,6 @@
             
             const introVideo = document.getElementById('intro-video');
             const playButton = document.getElementById('play-button-overlay'); 
-            
-            // NOVO E CRUCIAL: Cria a tag viewport dinamicamente e anexa
-            viewportMeta = document.createElement('meta');
-            viewportMeta.setAttribute('name', 'viewport');
-            viewportMeta.content = defaultViewport; // Começa com o padrão
-            document.head.appendChild(viewportMeta);
-            
-            // Adiciona o listener de orientação/resize
-            window.addEventListener('resize', handleOrientationChange);
-            window.addEventListener('orientationchange', handleOrientationChange);
-            handleOrientationChange(); // Executa ao carregar para verificar a orientação inicial
             
             // 🛑 IMPORTANTE: Remoção da lógica de autoplay para evitar problemas de zoom no início.
 
