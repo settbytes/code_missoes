@@ -36,10 +36,10 @@
             font-size: 2.2em;
         }
 
-        /* Subtítulo/Descrição (AJUSTADO) */
+        /* Subtítulo/Descrição */
         p.main-description {
             color: #586069;
-            margin-bottom: 5px; /* Margem reduzida */
+            margin-bottom: 5px;
             font-size: 1.1em;
         }
 
@@ -69,28 +69,49 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        /* Estilos para a mensagem de aviso de Desktop (NOVO ESTILO) */
+        /* ESTILOS DA MENSAGEM AZUL CLARO (PERMANENTE, SEM NEGRITO) */
         .warning-message-repositioned {
-            background-color: #e3f2fd; /* Azul bem clarinho */
-            color: #1565c0; /* Azul escuro para o texto */
+            background-color: #e3f2fd; 
+            color: #1565c0; 
             padding: 12px;
             border-radius: 8px;
             margin-top: 0;
-            margin-bottom: 25px; /* Espaço antes dos botões */
+            margin-bottom: 25px; 
             font-size: 0.95em;
-            font-weight: 500;
+            font-weight: normal; 
             display: block;
+            opacity: 1; 
         }
 
-        /* Ícone simples (opcional) */
-        .icon {
-            margin-right: 10px;
+        /* WRAPPER PARA MANTER O ESPAÇO NO LAYOUT */
+        .soon-message-wrapper {
+            min-height: 60px; /* Altura aproximada da caixa amarela + margens */
+            margin: 15px 0;
+            display: block; 
         }
-
-        /* Mensagens antigas (desativadas) */
+        
+        /* ESTILOS DA MENSAGEM AMARELA (INICIALMENTE OCULTA, SEM NEGRITO) */
         .soon-message {
-            display: none; 
+            background-color: #ffc107; 
+            color: #333; 
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: normal; /* Sem negrito */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            
+            /* Ocultamento que MANTÉM O ESPAÇO: */
+            visibility: hidden; 
+            opacity: 0; 
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out; 
         }
+        
+        /* Classe que torna a mensagem visível */
+        .soon-message.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
     </style>
 </head>
 <body>
@@ -103,7 +124,7 @@
         </p>
         
         <div id="desktopWarning" class="warning-message-repositioned">
-            Para uma melhor experiência, acesse pelo computador.
+            <b>Para uma melhor experiência, acesse pelo computador.</b>
         </div>
         
         <a href="https://settbytes.github.io/code_missoes/missoes_visualg/index.html" class="project-card">
@@ -113,15 +134,61 @@
         <a id="otherProjectsLink" class="project-card" onclick="showMessage()">
             Outros
         </a>
+        
+        <div id="soonMessageWrapper" class="soon-message-wrapper">
+            <div id="soonMessage" class="soon-message">
+                Mais opções serão adicionadas em breve!
+            </div>
+        </div>
     </div>
 
     <script>
-        // Mantido para evitar erros de referência no onclick
+        let hideTimeout;
+
         function showMessage() {
-            console.log("Mensagem de 'Outros' clicada.");
+            const soonMessageElement = document.getElementById('soonMessage');
+
+            // 1. Limpa o temporizador anterior para reiniciar a contagem (clique repetido)
+            clearTimeout(hideTimeout);
+
+            // 🔴 CORREÇÃO CRÍTICA: Remove estilos inline que podem estar impedindo o reaparecimento
+            soonMessageElement.style.visibility = ''; 
+            soonMessageElement.style.opacity = ''; 
+
+            // 2. Garante que a mensagem fique visível (adiciona a classe 'show')
+            soonMessageElement.classList.add('show');
+            
+            // 3. Agenda o desaparecimento após 4 segundos
+            hideTimeout = setTimeout(() => {
+                
+                // 4. Inicia o fade-out (remove a classe 'show')
+                soonMessageElement.classList.remove('show');
+                
+                // 5. Usa o transitionend para forçar a invisibilidade APÓS o fade-out
+                const transitionHandler = (e) => {
+                    if (e.propertyName === 'opacity') {
+                        // 6. Define a visibilidade como oculta (necessário para o próximo clique)
+                        soonMessageElement.style.visibility = 'hidden';
+                        
+                        // Remove este listener temporário
+                        soonMessageElement.removeEventListener('transitionend', transitionHandler);
+                    }
+                };
+                
+                // Adiciona o listener para este desaparecimento
+                soonMessageElement.addEventListener('transitionend', transitionHandler);
+
+            }, 4000); // 4 segundos
         }
+        
+        // Inicialização: Garante o estado inicial de invisibilidade
+        document.addEventListener('DOMContentLoaded', (event) => {
+             // O CSS já trata isso, mas mantemos o estilo inline para garantir o estado inicial
+             const soonMessageElement = document.getElementById('soonMessage');
+             soonMessageElement.style.visibility = 'hidden';
+             soonMessageElement.style.opacity = '0';
+        });
     </script>
 
 </body>
 </html>
-
