@@ -391,7 +391,7 @@
             </video>
             <div id="play-button-overlay" onclick="startVideo()"></div>
         </div>
-        <button id="btn-iniciar-pratica" onclick="lockScreen(); iniciarPratica();">COMEÇAR A PRATICAR</button>
+        <button id="btn-iniciar-pratica" onclick="iniciarPratica()">COMEÇAR A PRATICAR</button>
     </div>
     <audio id="motivational-audio" preload="auto"></audio>
         
@@ -520,27 +520,6 @@
             'avancado': 'audio3.mp3'
         };
 
-		function lockScreen() {
-    		const overlay = document.getElementById('video-overlay');
-
-		    // Tenta entrar em Tela Cheia no overlay (incluindo prefixo webkit para compatibilidade iOS/Safari)
-		    if (overlay.requestFullscreen || overlay.webkitRequestFullscreen) {
-		        (overlay.requestFullscreen || overlay.webkitRequestFullscreen)
-		            .call(overlay)
-		            .then(() => {
-		                // Se a Tela Cheia for um sucesso, tenta bloquear a orientação
-		                if (screen.orientation && screen.orientation.lock) {
-		                    screen.orientation.lock('portrait').catch(err => {
-		                        console.warn("Bloqueio de Orientação falhou após Fullscreen:", err);
-		                    });
-		                }
-		            })
-		            .catch(err => {
-		                console.warn("Não foi possível entrar em modo Tela Cheia:", err);
-		            });
-		    }
-		}
-		
         function startVideo() {
             const introVideo = document.getElementById('intro-video');
             const playButton = document.getElementById('play-button-overlay');
@@ -575,20 +554,6 @@
                 playButton.style.opacity = '0';
                 playButton.style.pointerEvents = 'none';
             }
-
-			// 👇 NOVO BLOCO DE CÓDIGO: DESBLOQUEIA TELA CHEIA E ORIENTAÇÃO ANTES DE REMOVER O OVERLAY
-		    // 1. Sai do Fullscreen (usa document.exitFullscreen ou webkitExitFullscreen)
-		    if (document.fullscreenElement || document.webkitFullscreenElement) {
-		        (document.exitFullscreen || document.webkitExitFullscreen).call(document).catch(err => {
-		            console.warn("Erro ao sair do Fullscreen:", err);
-		        });
-		    }
-		    
-		    // 2. Libera a Orientação
-		    if (screen.orientation && screen.orientation.unlock) {
-		        screen.orientation.unlock();
-		    }
-		    // 👆 FIM DO NOVO BLOCO
 
             // Inicia a transição de opacidade para ocultar o overlay suavemente
             videoOverlay.style.opacity = '0';
@@ -956,7 +921,5 @@
 
 </body>
 </html>
-
-
 
 
