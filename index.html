@@ -13,7 +13,7 @@
             --cor-primaria: #0366d6;
             --cor-texto-escuro: #333;
             --cor-aviso-texto: #1565c0;
-            --cor-foguete: #e74c3c; /* Mantido, mas não usado diretamente para emojis */
+            --cor-foguete: #e74c3c;
         }
 
         body {
@@ -39,29 +39,25 @@
             text-align: center;
         }
 
-        /* --- NOVOS ESTILOS PARA EMOJI ACIMA DA SAUDAÇÃO --- */
-        #main-greeting-block {
+        /* --- ESTILOS PARA O ÍCONE DINÂMICO ACIMA DO TÍTULO --- */
+
+        /* Contêiner do Emoji (Centralização e Espaçamento) */
+        #dynamic-icon-container {
+            text-align: center;
+            margin-bottom: 15px; /* ESPAÇO AJUSTADO: Aumenta a distância para o título */
+            line-height: 1;
+            font-size: 3em; /* Tamanho do emoji maior para destaque */
+        }
+        
+        /* Estilo do Título Fixo */
+        #fixed-title {
             color: var(--cor-primaria);
-            margin-bottom: 20px; /* Espaço abaixo de todo o bloco de saudação */
+            margin: 0 0 10px 0; /* Espaço abaixo do título */
             font-size: 2.2em;
-            display: flex; /* Para controlar o layout dos spans */
-            flex-direction: column; /* Empilha o emoji e o texto */
-            align-items: center; /* Centraliza horizontalmente os itens */
-            justify-content: center; /* Centraliza verticalmente o bloco (se necessário) */
-            margin-top: 0;
+            text-align: center;
             line-height: 1.2;
         }
-
-        #greeting-emoji {
-            font-size: 1.5em; /* Tamanho do emoji maior para destaque */
-            margin-bottom: 5px; /* Pequeno espaço entre o emoji e o texto */
-            /* Emojis geralmente têm sua própria cor, mas você pode forçar com 'color' se precisar */
-        }
-
-        #greeting-text {
-            /* O texto da saudação herda a cor de #main-greeting-block */
-        }
-        /* --- FIM DOS NOVOS ESTILOS --- */
+        /* --- FIM DOS ESTILOS CORRIGIDOS --- */
 
 
         p.main-description {
@@ -144,10 +140,9 @@
 <body>
 
     <div class="container">
-        <h1 id="main-greeting-block">
-            <span id="greeting-emoji"></span>
-            <span id="greeting-text">Carregando...</span>
-        </h1> 
+        <div id="dynamic-icon-container"></div>
+        
+        <h1 id="fixed-title">Missões VisuAlg</h1>
 
         <p class="main-description">
         Seja bem-vindo(a) ao repositório de exercícios de programação.<br>
@@ -175,34 +170,25 @@
         const duration = 4000; // 4 segundos
 
         /**
-         * FUNÇÃO MODIFICADA: Determina e exibe a saudação e o emoji corretos
+         * FUNÇÃO: Determina e exibe o emoji correto (Sol ou Lua)
          */
-        function updateGreeting() {
+        function updateIcon() {
             const h = new Date().getHours();
-            let greetingText = '';
-            let greetingEmoji = '';
+            let dynamicEmoji = '';
 
-            // Regras de saudação e emoji baseadas no horário local (24h)
-            if (h >= 0 && h <= 5) {
-                greetingText = 'Boa noite!'; // 00h às 05:59h
-                greetingEmoji = '🌙';
-            } else if (h < 12) {
-                greetingText = 'Bom dia!'; // 06h às 11:59h
-                greetingEmoji = '☀️';
-            } else if (h < 18) {
-                greetingText = 'Boa tarde!'; // 12h às 17:59h
-                greetingEmoji = '☀️';
-            } else {
-                greetingText = 'Boa noite!'; // 18h às 23:59h
-                greetingEmoji = '🌙';
+            // Regras de emoji baseadas no horário local (24h)
+            // Noite: 00h-05h e 18h-23h
+            if (h >= 0 && h <= 5 || h >= 18) {
+                dynamicEmoji = '🌙'; 
+            } 
+            // Dia/Tarde: 06h-17h
+            else {
+                dynamicEmoji = '☀️'; 
             }
 
-            const greetingTextElement = document.getElementById('greeting-text');
-            const greetingEmojiElement = document.getElementById('greeting-emoji');
-
-            if (greetingTextElement && greetingEmojiElement) {
-                greetingTextElement.textContent = greetingText;
-                greetingEmojiElement.textContent = greetingEmoji;
+            const iconContainer = document.getElementById('dynamic-icon-container');
+            if (iconContainer) {
+                iconContainer.textContent = dynamicEmoji;
             }
         }
 
@@ -264,10 +250,9 @@
             }, duration);
         }
 
-        // CHAMA A FUNÇÃO DE SAUDAÇÃO AO CARREGAR A PÁGINA
-        document.addEventListener('DOMContentLoaded', updateGreeting);
+        // CHAMA A FUNÇÃO DE ÍCONE AO CARREGAR A PÁGINA
+        document.addEventListener('DOMContentLoaded', updateIcon);
     </script>
 
 </body>
 </html>
-
