@@ -39,14 +39,15 @@
             text-align: center;
         }
 
-        /* --- ESTILOS PARA O ÍCONE DINÂMICO ACIMA DO TÍTULO --- */
+        /* --- ESTILOS PARA O ÍCONE FIXO ACIMA DO TÍTULO --- */
 
         /* Contêiner do Emoji (Centralização e Espaçamento) */
         #dynamic-icon-container {
             text-align: center;
-            margin-bottom: 15px; /* ESPAÇO AJUSTADO: Aumenta a distância para o título */
+            margin-bottom: 15px; /* ESPAÇO AJUSTADO: 15px de distância para o título */
             line-height: 1;
-            font-size: 3em; /* Tamanho do emoji maior para destaque */
+            font-size: 3em; /* Tamanho do emoji */
+            color: var(--cor-foguete); /* Aplica a cor definida para o foguete, se necessário */
         }
         
         /* Estilo do Título Fixo */
@@ -57,7 +58,7 @@
             text-align: center;
             line-height: 1.2;
         }
-        /* --- FIM DOS ESTILOS CORRIGIDOS --- */
+        /* --- FIM DOS ESTILOS --- */
 
 
         p.main-description {
@@ -170,25 +171,12 @@
         const duration = 4000; // 4 segundos
 
         /**
-         * FUNÇÃO: Determina e exibe o emoji correto (Sol ou Lua)
+         * FUNÇÃO: Define o emoji de foguete fixo.
          */
         function updateIcon() {
-            const h = new Date().getHours();
-            let dynamicEmoji = '';
-
-            // Regras de emoji baseadas no horário local (24h)
-            // Noite: 00h-05h e 18h-23h
-            if (h >= 0 && h <= 5 || h >= 18) {
-                dynamicEmoji = '🌙'; 
-            } 
-            // Dia/Tarde: 06h-17h
-            else {
-                dynamicEmoji = '☀️'; 
-            }
-
             const iconContainer = document.getElementById('dynamic-icon-container');
             if (iconContainer) {
-                iconContainer.textContent = dynamicEmoji;
+                iconContainer.textContent = '🚀'; // Emoji de foguete fixo
             }
         }
 
@@ -256,21 +244,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
