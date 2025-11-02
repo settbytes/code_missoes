@@ -29,36 +29,53 @@
             box-sizing: border-box;
         }
 
+        /* --- ESTILO CORRIGIDO PARA Z-INDEX E POSIÇÃO --- */
         .container {
             background-color: var(--cor-cartao);
             padding: 40px;
+            /* Padding superior reduzido, pois o botão de áudio foi removido */
+            padding-top: 40px; 
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             max-width: 600px;
             width: 90%;
             text-align: center;
+            position: relative; 
+            z-index: 1; 
+            /* ANIMAÇÃO DE ENTRADA REMOVIDA */
+        }
+        /* --- REMOVIDOS ESTILOS DE ÁUDIO --- */
+
+
+        /* --- ESTILOS DE ANIMAÇÃO (APENAS O FOGUETE) --- */
+        @keyframes rocketPulse {
+            0% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-3px) rotate(-2deg); }
+            50% { transform: translateY(0) rotate(0deg); }
+            75% { transform: translateY(3px) rotate(2deg); }
+            100% { transform: translateY(0) rotate(0deg); }
         }
 
-        /* --- ESTILOS PARA O ÍCONE FIXO ACIMA DO TÍTULO --- */
-
-        /* Contêiner do Emoji (Centralização e Espaçamento) */
+        /* --- ESTILOS PARA O ÍCONE FIXO ACIMA DO TÍTULO COM ANIMAÇÃO --- */
         #dynamic-icon-container {
             text-align: center;
-            margin-bottom: 15px; /* ESPAÇO AJUSTADO: 15px de distância para o título */
+            margin-bottom: 15px; 
             line-height: 1;
-            font-size: 3em; /* Tamanho do emoji */
-            color: var(--cor-foguete); /* Aplica a cor definida para o foguete, se necessário */
+            font-size: 3em; 
+            color: var(--cor-foguete); 
+            display: inline-block; 
+            animation: rocketPulse 3s infinite ease-in-out; 
         }
         
         /* Estilo do Título Fixo */
         #fixed-title {
             color: var(--cor-primaria);
-            margin: 0 0 10px 0; /* Espaço abaixo do título */
+            margin: 0 0 10px 0; 
             font-size: 2.2em;
             text-align: center;
             line-height: 1.2;
         }
-        /* --- FIM DOS ESTILOS --- */
+        /* --- FIM DOS ESTILOS DE ÍCONE E TÍTULO --- */
 
 
         p.main-description {
@@ -88,50 +105,23 @@
             transform: translateY(-2px);
         }
 
-        /* ------------------------------------------- */
-        /* ESTILOS PARA O POP-UP MODAL (MANTIDOS) */
-        /* ------------------------------------------- */
-
-        /* Overlay (Fundo Escuro) */
+        /* (Estilos do Pop-up omitidos por brevidade) */
         #popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); z-index: 1000;
+            display: none; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.3s ease-in-out;
         }
-
-        /* Pop-up (Caixa da Mensagem) */
         .popup-content {
-            background-color: var(--cor-cartao);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            max-width: 350px;
-            width: 90%;
-            text-align: center;
-            transform: translateY(-20px);
-            transition: transform 0.3s ease-in-out;
+            background-color: var(--cor-cartao); padding: 30px; border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); max-width: 350px; width: 90%;
+            text-align: center; transform: translateY(-20px); transition: transform 0.3s ease-in-out;
         }
-
         .popup-content #popupMessage {
-            color: var(--cor-aviso-texto);
-            font-size: 1.1em;
-            font-weight: bold;
-            margin: 0;
+            color: var(--cor-aviso-texto); font-size: 1.1em; font-weight: bold; margin: 0;
         }
-
-        /* Classes de Controle por JS */
         #popup-overlay.show {
-            display: flex;
-            opacity: 1;
+            display: flex; opacity: 1;
         }
         #popup-overlay.show .popup-content {
             transform: translateY(0);
@@ -139,7 +129,7 @@
     </style>
 </head>
 <body>
-
+    
     <div class="container">
         <div id="dynamic-icon-container"></div>
         
@@ -192,6 +182,8 @@
             setTimeout(() => {
                 popupOverlay.style.display = 'none';
             }, 50);
+            
+            // REMOVIDA LÓGICA DE ÁUDIO
         }
         
         window.addEventListener('pageshow', hideModalOnPageRestore);
@@ -208,6 +200,8 @@
             setTimeout(() => { popupOverlay.classList.add('show'); }, 10);
             
             element.style.pointerEvents = 'none';
+
+            // REMOVIDA PAUSA DO ÁUDIO
 
             setTimeout(() => {
                 if (targetUrl) {
