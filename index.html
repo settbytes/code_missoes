@@ -14,6 +14,8 @@
             --cor-texto-escuro: #333;
             --cor-aviso-texto: #1565c0;
             --cor-foguete: #e74c3c;
+            --cor-destaque-fundo: #F5F8FF; /* NOVO: Azul Claro, Quase Branco */
+            --cor-destaque-texto: var(--cor-primaria); /* Texto Azul Forte */
         }
 
         body {
@@ -33,7 +35,6 @@
         .container {
             background-color: var(--cor-cartao);
             padding: 40px;
-            /* Padding superior reduzido, pois o botão de áudio foi removido */
             padding-top: 40px; 
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
@@ -42,10 +43,7 @@
             text-align: center;
             position: relative; 
             z-index: 1; 
-            /* ANIMAÇÃO DE ENTRADA REMOVIDA */
         }
-        /* --- REMOVIDOS ESTILOS DE ÁUDIO --- */
-
 
         /* --- ESTILOS DE ANIMAÇÃO (APENAS O FOGUETE) --- */
         @keyframes rocketPulse {
@@ -56,7 +54,6 @@
             100% { transform: translateY(0) rotate(0deg); }
         }
 
-        /* --- ESTILOS PARA O ÍCONE FIXO ACIMA DO TÍTULO COM ANIMAÇÃO --- */
         #dynamic-icon-container {
             text-align: center;
             margin-bottom: 15px; 
@@ -67,7 +64,6 @@
             animation: rocketPulse 3s infinite ease-in-out; 
         }
         
-        /* Estilo do Título Fixo */
         #fixed-title {
             color: var(--cor-primaria);
             margin: 0 0 10px 0; 
@@ -75,15 +71,36 @@
             text-align: center;
             line-height: 1.2;
         }
-        /* --- FIM DOS ESTILOS DE ÍCONE E TÍTULO --- */
 
-
-        p.main-description {
+        /* --- ESTILO DA DESCRIÇÃO (DOIS PARÁGRAFOS) --- */
+        .main-description {
             color: #586069;
             margin-bottom: 35px;
             font-size: 1.1em;
             line-height: 1.4;
+            text-align: center;
         }
+        
+        .main-description p {
+            margin: 0; 
+            padding: 0;
+        }
+        
+        .main-description p:first-child {
+            margin-bottom: 20px; /* ESPAÇAMENTO APRIMORADO */
+        }
+
+        /* --- ESTILO DE DESTAQUE AZUL CLARO E ESPAÇAMENTO --- */
+        .highlight-text {
+            background-color: var(--cor-destaque-fundo); 
+            color: var(--cor-destaque-texto); /* Cor Azul Forte */
+            padding: 10px 18px; /* Padding Aumentado */
+            border-radius: 8px; 
+            display: inline-block; 
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* Sombra mais sutil */
+        }
+        /* --- FIM DO ESTILO DA DESCRIÇÃO --- */
+
 
         .project-card {
             display: block;
@@ -135,10 +152,10 @@
         
         <h1 id="fixed-title">Missões VisuAlg</h1>
 
-        <p class="main-description">
-        Seja bem-vindo(a) ao nosso repositório de exercícios de programação.<br>
-        Escolha o módulo que deseja praticar!
-        </p>
+        <div class="main-description">
+            <p>Seja bem-vindo(a) ao nosso repositório de exercícios de programação!</p>
+            <p><span class="highlight-text">Escolha uma opção para continuar.</span></p>
+        </div>
         
         <a data-link="missoes_visualg/apresentacao.html" class="project-card" onclick="handleModuleClick(this)">
             VisuAlg - Noções Básicas, Condições e Repetições
@@ -166,7 +183,7 @@
         function updateIcon() {
             const iconContainer = document.getElementById('dynamic-icon-container');
             if (iconContainer) {
-                iconContainer.textContent = '🚀'; // Emoji de foguete fixo
+                iconContainer.textContent = '🚀'; 
             }
         }
 
@@ -182,8 +199,6 @@
             setTimeout(() => {
                 popupOverlay.style.display = 'none';
             }, 50);
-            
-            // REMOVIDA LÓGICA DE ÁUDIO
         }
         
         window.addEventListener('pageshow', hideModalOnPageRestore);
@@ -200,8 +215,6 @@
             setTimeout(() => { popupOverlay.classList.add('show'); }, 10);
             
             element.style.pointerEvents = 'none';
-
-            // REMOVIDA PAUSA DO ÁUDIO
 
             setTimeout(() => {
                 if (targetUrl) {
@@ -238,4 +251,3 @@
 
 </body>
 </html>
-
