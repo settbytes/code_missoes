@@ -288,9 +288,14 @@
             font-weight: bold;
         }
         
-        .close-button {
-            background-color: #7f8c8d;
-            color: white;
+		.close-button {
+            background-color: var(--cor-primaria); /* CORREÇÃO APLICADA AQUI */
+            color: var(--cor-fundo); /* Texto escuro para contraste com o verde */
+        }
+        
+        .close-button:hover {
+            background-color: #27ae60; /* Verde ligeiramente mais escuro para hover */
+            transform: translateY(-1px);
         }
         
         .confirm-button.reset {
@@ -314,7 +319,7 @@
         <div class="modal-content" id="modal-content-area">
             <h2 id="modal-title">Nível Concluído!</h2>
             <p id="modal-message"></p>
-            <button class="close-button" onclick="closeModal()">Ótimo!</button>
+            <button class="close-button" onclick="closeModal()">Entendido!</button>
         </div>
     </div>
     
@@ -767,6 +772,7 @@
 </body>
 
 </html>
+
 
 
 
